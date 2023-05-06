@@ -2,7 +2,7 @@ package com.gameForum.service.impl;
 
 import com.gameForum.entity.Article;
 import com.gameForum.mapper.ArticleMapper;
-import com.gameForum.service.IArticleService;
+import com.gameForum.service.ArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-04-21
  */
 @Service
-public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService {
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
 }

@@ -1,12 +1,11 @@
-package com.example.config;
+package com.gameForum.config;
 
-import com.example.common.JacksonObjectMapper;
+import com.gameForum.common.JacksonObjectMapper;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -54,13 +53,13 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     public Docket createRestApi(){
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.test"))
+                .apis(RequestHandlerSelectors.basePackage("com.gameForum.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo(){
-        return new ApiInfoBuilder().title("静谧音乐社").version("1.0")
+        return new ApiInfoBuilder().title("游戏论坛").version("1.0")
                 .description("接口文档")
                 .build();
     }

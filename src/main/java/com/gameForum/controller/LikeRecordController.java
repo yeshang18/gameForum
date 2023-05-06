@@ -1,6 +1,7 @@
 package com.gameForum.controller;
 
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-04-21
  */
 @RestController
-@RequestMapping("/like_record")
-public class Like_recordController {
+@RequestMapping("/likeRecord")
+@ApiOperation("点赞记录接口")
+public class LikeRecordController {
 
 }
 

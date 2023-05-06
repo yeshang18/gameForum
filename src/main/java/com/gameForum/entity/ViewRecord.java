@@ -1,8 +1,7 @@
 package com.gameForum.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
@@ -18,21 +17,27 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class View_record implements Serializable {
+public class ViewRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private Integer article_id;
+    private Integer articleId;
 
-    private Integer user_id;
+    private Integer userId;
 
-    private LocalDateTime create_time;
+    //创建时间
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
-    private LocalDateTime update_time;
+    //更新时间
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
+    //逻辑删除
+    @TableLogic(value = "0",delval = "1")
     private Integer deleted;
 
 

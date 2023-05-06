@@ -1,8 +1,7 @@
 package com.gameForum.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
@@ -25,18 +24,31 @@ public class Comment implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private Integer article_id;
+    //评论帖子ID
+    private Integer articleId;
 
-    private Integer comment_id;
+    //评论评论Id
+    private Integer commentId;
 
+    //评论内容
     private String content;
 
-    private Integer user_id;
+    //点赞数
+    private Integer like;
 
-    private LocalDateTime create_time;
+    //评论用户
+    private Integer userId;
 
-    private LocalDateTime update_time;
+    //创建时间
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
+    //更新时间
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+
+    //逻辑删除
+    @TableLogic(value = "0",delval = "1")
     private Integer deleted;
 
 

@@ -1,6 +1,6 @@
 package com.gameForum.mapper;
 
-import com.gameForum.entity.Game_type;
+import com.gameForum.entity.GameType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author yeshang18
  * @since 2023-04-21
  */
-public interface Game_typeMapper extends BaseMapper<Game_type> {
+public interface GameTypeMapper extends BaseMapper<GameType> {
 
 }

@@ -1,4 +1,4 @@
-package com.example.common;
+package com.gameForum.common;
 
 import lombok.Data;
 

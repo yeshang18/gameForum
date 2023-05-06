@@ -1,8 +1,8 @@
 package com.gameForum.service.impl;
 
-import com.gameForum.entity.View_record;
-import com.gameForum.mapper.View_recordMapper;
-import com.gameForum.service.IView_recordService;
+import com.gameForum.entity.ViewRecord;
+import com.gameForum.mapper.ViewRecordMapper;
+import com.gameForum.service.ViewRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-04-21
  */
 @Service
-public class View_recordServiceImpl extends ServiceImpl<View_recordMapper, View_record> implements IView_recordService {
+public class ViewRecordServiceImpl extends ServiceImpl<ViewRecordMapper, ViewRecord> implements ViewRecordService {
 
 }

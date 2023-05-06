@@ -1,4 +1,4 @@
-package com.example.common;
+package com.gameForum.common;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;

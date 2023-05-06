@@ -1,6 +1,6 @@
 package com.gameForum.service;
 
-import com.gameForum.entity.Game_type;
+import com.gameForum.entity.GameType;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author yeshang18
  * @since 2023-04-21
  */
-public interface IGame_typeService extends IService<Game_type> {
+public interface GameTypeService extends IService<GameType> {
 
 }

@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.gameForum.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

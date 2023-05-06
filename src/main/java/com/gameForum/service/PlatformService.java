@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author yeshang18
  * @since 2023-04-21
  */
-public interface IPlatformService extends IService<Platform> {
+public interface PlatformService extends IService<Platform> {
 
 }

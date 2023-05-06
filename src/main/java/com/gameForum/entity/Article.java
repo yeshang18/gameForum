@@ -1,12 +1,12 @@
 package com.gameForum.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * <p>
@@ -25,18 +25,30 @@ public class Article implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    //标题
     private String title;
 
+    //帖子内容
     private String content;
 
+    //浏览数
     private Integer view;
 
+    //点赞数
+    private Integer like;
+
+    //发帖用户
     private Integer user;
+    //创建时间
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
-    private LocalDateTime create_time;
+    //更新时间
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
-    private LocalDateTime update_time;
-
+    //逻辑删除
+    @TableLogic(value = "0",delval = "1")
     private Integer deleted;
 
 

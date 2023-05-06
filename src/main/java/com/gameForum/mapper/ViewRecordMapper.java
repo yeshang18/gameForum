@@ -1,6 +1,6 @@
 package com.gameForum.mapper;
 
-import com.gameForum.entity.View_record;
+import com.gameForum.entity.ViewRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author yeshang18
  * @since 2023-04-21
  */
-public interface View_recordMapper extends BaseMapper<View_record> {
+public interface ViewRecordMapper extends BaseMapper<ViewRecord> {
 
 }

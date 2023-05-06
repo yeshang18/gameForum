@@ -1,6 +1,6 @@
 package com.gameForum.mapper;
 
-import com.gameForum.entity.Like_record;
+import com.gameForum.entity.LikeRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author yeshang18
  * @since 2023-04-21
  */
-public interface Like_recordMapper extends BaseMapper<Like_record> {
+public interface LikeRecordMapper extends BaseMapper<LikeRecord> {
 
 }

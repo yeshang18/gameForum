@@ -1,4 +1,4 @@
-package com.example.common;
+package com.gameForum.common;
 
 public class CustomException extends RuntimeException{
     public CustomException(String message){

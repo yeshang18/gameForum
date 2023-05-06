@@ -1,8 +1,7 @@
 package com.gameForum.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
@@ -35,8 +34,14 @@ public class User implements Serializable {
      */
     private String password;
 
+    /**
+     * 头像
+     */
     private String img;
 
+    /**
+     * 昵称
+     */
     private String name;
 
     /**
@@ -59,10 +64,16 @@ public class User implements Serializable {
      */
     private Integer power;
 
-    private LocalDateTime create_time;
+    //创建时间
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
-    private LocalDateTime update_time;
+    //更新时间
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
+    //逻辑删除
+    @TableLogic(value = "0",delval = "1")
     private Integer deleted;
 
     /**

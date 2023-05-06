@@ -1,6 +1,6 @@
 package com.gameForum.service;
 
-import com.gameForum.entity.View_record;
+import com.gameForum.entity.ViewRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author yeshang18
  * @since 2023-04-21
  */
-public interface IView_recordService extends IService<View_record> {
+public interface ViewRecordService extends IService<ViewRecord> {
 
 }
