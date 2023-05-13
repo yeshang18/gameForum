@@ -23,7 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/game")
-@Api("游戏信息接口")
+@Api(tags = "游戏信息接口")
 public class GameController {
 
     @Autowired

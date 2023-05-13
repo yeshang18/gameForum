@@ -8,11 +8,12 @@ import com.gameForum.service.UserService;
 import com.gameForum.utils.IsPhone;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jakarta.servlet.http.HttpServletRequest;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -156,7 +157,7 @@ public class UserController {
     /**
      * 解封用户
      */
-    @PostMapping("/status/1")
+    @PutMapping("/status/1")
     @ApiOperation("解封用户")
     public R<String> enabled(@RequestBody User user){
         user.setStatus(0);
@@ -167,13 +168,42 @@ public class UserController {
     /**
      * 封禁用户
      */
-    @PostMapping("/status/0")
+    @PutMapping("/status/0")
     @ApiOperation("禁用用户")
     public R<String> disabled(@RequestBody User user){
         user.setStatus(1);
         userService.updateById(user);
         return R.success("封禁成功!");
     }
+
+
+    @PutMapping("/integral/add")
+    @ApiOperation("积分增加")
+    public R<String> addScore(@RequestBody User user,Integer num){
+        user.setIntegral(user.getIntegral()+num);
+        userService.updateById(user);
+        return R.success("操作成功!");
+    }
+
+    @PutMapping("/integral/reduce")
+    @ApiOperation("积分减少")
+    public R<String> reduceScore(@RequestBody User user,Integer num){
+        if(user.getIntegral()-num<0){
+            return R.error("操作异常!");
+        }
+        user.setIntegral(user.getIntegral()-num);
+        userService.updateById(user);
+        return R.success("操作成功!");
+    }
+
+    @PutMapping("/level")
+    @ApiOperation("经验增加")
+    public R<String> addLevel(@RequestBody User user,Integer num){
+        user.setLevel(user.getLevel()+num);
+        userService.updateById(user);
+        return R.success("操作成功！");
+    }
+
 
 }
 

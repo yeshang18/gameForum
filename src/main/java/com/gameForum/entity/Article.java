@@ -28,6 +28,8 @@ public class Article implements Serializable {
     //标题
     private String title;
 
+    private Integer gameId;
+
     //帖子内容
     private String content;
 
