@@ -1,7 +1,8 @@
 package com.gameForum.service;
 
-import com.gameForum.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gameForum.entity.Article;
+import com.gameForum.entity.ArticleType;
 
 /**
  * <p>
@@ -11,6 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author yeshang18
  * @since 2023-04-21
  */
-public interface ArticleService extends IService<Article> {
+public interface ArticleTypeService extends IService<ArticleType> {
 
 }

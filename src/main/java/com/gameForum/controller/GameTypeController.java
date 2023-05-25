@@ -1,8 +1,10 @@
 package com.gameForum.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gameForum.common.R;
 import com.gameForum.entity.GameType;
+import com.gameForum.entity.Platform;
 import com.gameForum.service.GameTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,9 +30,11 @@ public class GameTypeController {
 
     @GetMapping("/getAll")
     @ApiOperation("获取所有游戏类型")
-    public R<List<GameType>> getAll(){
-        List<GameType> list = gameTypeService.list();
-        return R.success(list);
+    public R<Page<GameType>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
+        Page<GameType> pageInfo = new Page<>(pageNo,pageSize);
+        gameTypeService.page(pageInfo);
+        return R.success(pageInfo);
     }
 
     @PostMapping("/add")

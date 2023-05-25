@@ -1,10 +1,14 @@
 package com.gameForum.service.impl;
 
 import com.gameForum.entity.Comment;
+import com.gameForum.entity.CommentDto;
 import com.gameForum.mapper.CommentMapper;
 import com.gameForum.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +21,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
+    @Autowired
+    private CommentMapper commentMapper;
+    @Override
+    public List<CommentDto> getCommentOrderByTime(Integer articleId, Integer pageNo, Integer pageSize, Integer userId) {
+        return commentMapper.selectCommentOrderByTime(articleId, pageNo, pageSize, userId);
+    }
+
+    @Override
+    public List<CommentDto> getCommentOrderByLikes(Integer articleId, Integer pageNo, Integer pageSize, Integer userId) {
+        return commentMapper.selectCommentOrderByLikes(articleId, pageNo, pageSize, userId);
+    }
+
+    @Override
+    public List<CommentDto> getChildrenComments(Integer articleId, Integer pageNo, Integer pageSize, Integer userId) {
+        return commentMapper.selectChildrenComments(articleId, pageNo, pageSize, userId);
+    }
 }

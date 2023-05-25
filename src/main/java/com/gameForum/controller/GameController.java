@@ -2,8 +2,10 @@ package com.gameForum.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gameForum.common.R;
 import com.gameForum.entity.Game;
+import com.gameForum.entity.PageInfo;
 import com.gameForum.service.GameService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,11 +39,19 @@ public class GameController {
         return R.success("添加成功！");
     }
 
+//    @GetMapping("/getAll")
+//    @ApiOperation("获取所有游戏")
+//    public R<List<Game>> getALl(){
+//        List<Game> list = gameService.list();
+//        return R.success(list);
+//    }
     @GetMapping("/getAll")
     @ApiOperation("获取所有游戏")
-    public R<List<Game>> getALl(){
-        List<Game> list = gameService.list();
-        return R.success(list);
+    public R<Page<Game>> getALl(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+                                @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
+        Page<Game> pageInfo = new Page<>(pageNo,pageSize);
+        gameService.page(pageInfo);
+        return R.success(pageInfo);
     }
 
     @GetMapping("/getById")
@@ -53,29 +63,35 @@ public class GameController {
 
     @GetMapping("/getByType")
     @ApiOperation("根据类型获取游戏")
-    public R<List<Game>> getByType(Integer typeId){
+    public R<Page<Game>> getByType(Integer typeId,@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+                                   @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
         LambdaQueryWrapper<Game> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Game::getType,typeId);
-        List<Game> list = gameService.list(lambdaQueryWrapper);
-        return R.success(list);
+        Page<Game> pageInfo = new Page<>(pageNo,pageSize);
+        gameService.page(pageInfo,lambdaQueryWrapper);
+        return R.success(pageInfo);
     }
 
     @GetMapping("/getByPf")
     @ApiOperation("根据平台获取游戏")
-    public R<List<Game>> getByPlatform(Integer platformId){
+    public R<Page<Game>> getByPlatform(Integer platformId,@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+                                       @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
         LambdaQueryWrapper<Game> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Game::getPlatform,platformId);
-        List<Game> list = gameService.list(lambdaQueryWrapper);
-        return R.success(list);
+        Page<Game> pageInfo = new Page<>(pageNo,pageSize);
+        gameService.page(pageInfo,lambdaQueryWrapper);
+        return R.success(pageInfo);
     }
 
     @GetMapping("/getByName")
     @ApiOperation("根据名称获取游戏")
-    public R<List<Game>> getByName(String name) {
+    public R<Page<Game>> getByName(String name,@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+                                   @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Game> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.like(Game::getName,name);
-        List<Game> list = gameService.list(lambdaQueryWrapper);
-        return R.success(list);
+        Page<Game> pageInfo = new Page<>(pageNo,pageSize);
+        gameService.page(pageInfo,lambdaQueryWrapper);
+        return R.success(pageInfo);
     }
 
     @PutMapping("/update")

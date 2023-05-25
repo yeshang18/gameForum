@@ -34,7 +34,7 @@ public class Comment implements Serializable {
     private String content;
 
     //点赞数
-    private Integer like;
+    private Integer likes;
 
     //评论用户
     private Integer userId;

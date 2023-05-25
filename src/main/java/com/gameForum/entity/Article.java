@@ -27,9 +27,12 @@ public class Article implements Serializable {
 
     //标题
     private String title;
-
+    //游戏id
     private Integer gameId;
 
+    private Integer articleTypeId;
+    //是否置顶
+    private Integer isTop;
     //帖子内容
     private String content;
 
@@ -37,10 +40,10 @@ public class Article implements Serializable {
     private Integer view;
 
     //点赞数
-    private Integer like;
+    private Integer likes;
 
     //发帖用户
-    private Integer user;
+    private Integer userId;
     //创建时间
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

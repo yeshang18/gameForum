@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gameForum.mapper.CommentMapper">
+    <resultMap id="baseMap" type="com.gameForum.entity.CommentDto">
+    </resultMap>
 
+    <select id="selectCommentOrderByTime" resultType="com.gameForum.entity.CommentDto" resultMap="baseMap">
+        select comment.*,a.user_name,a.img,
+               if(isnull(b.id),false,true) as flag
+        from comment
+                 left join (select id,name as user_name,img from user WHERE deleted = 0) a on a.id = comment.user_id
+                 left JOIN (SELECT comment_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on comment.id = b.comment_id
+        where comment.article_id = #{articleId} and deleted =0 order by comment.create_time Limit #{pageOn},#{pageSize}
+    </select>
+    <select id="selectCommentOrderByLikes" resultType="com.gameForum.entity.CommentDto" resultMap="baseMap">
+        select comment.*,a.user_name,a.img,
+               if(isnull(b.id),false,true) as flag
+        from comment
+                 left join (select id,name as user_name,img from user WHERE deleted = 0) a on a.id = comment.user_id
+                 left JOIN (SELECT comment_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on comment.id = b.comment_id
+        where comment.article_id = #{articleId} and deleted =0 order by comment.create_time Limit #{pageOn},#{pageSize}
+    </select>
+    <select id="selectChildrenComments" resultType="com.gameForum.entity.CommentDto" resultMap="baseMap">
+        select comment.*,a.user_name,a.img,
+               if(isnull(b.id),false,true) as flag
+        from comment
+                 left join (select id,name as user_name,img from user WHERE deleted = 0) a on a.id = comment.user_id
+                 left JOIN (SELECT comment_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on comment.id = b.comment_id
+        where comment.comment_id = #{commentId} and deleted =0 order by comment.create_time Limit #{pageOn},#{pageSize}
+    </select>
 </mapper>

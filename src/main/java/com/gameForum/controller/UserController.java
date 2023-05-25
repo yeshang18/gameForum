@@ -1,19 +1,23 @@
 package com.gameForum.controller;
 
 
+import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gameForum.common.R;
 import com.gameForum.entity.User;
 import com.gameForum.service.UserService;
 import com.gameForum.utils.IsPhone;
+import com.gameForum.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -92,10 +96,14 @@ public class UserController {
         //检测是否被注册
         LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(User::getUsername, user.getUsername());
-        lambdaQueryWrapper.eq(User::getPhone, user.getPhone());
+        LambdaQueryWrapper<User> lambdaQueryWrapper1 =new LambdaQueryWrapper<>();
+        lambdaQueryWrapper1.eq(User::getPhone, user.getPhone());
         int count = Math.toIntExact(userService.count(lambdaQueryWrapper));
         if(count>0)
-            return R.error("该用户名或手机号已被注册");
+            return R.error("该用户名已被注册");
+        int count1 = Math.toIntExact(userService.count(lambdaQueryWrapper1));
+        if(count1>0)
+            return R.error("该手机号已被注册");
         String password = user.getPassword()+user.getUsername();
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         user.setPassword(password);
@@ -108,7 +116,7 @@ public class UserController {
      */
     @PostMapping("/login")
     @ApiOperation("用户登陆")
-    public R<User> login(@RequestBody User user, HttpServletRequest request){
+    public R<User> login(@RequestBody User user, HttpServletResponse response){
         //验证是否用户名以及手机号都为空
         if(user.getUsername()==null&&user.getPhone()==null)
             return R.error("请输入用户名或手机号码！");
@@ -126,7 +134,9 @@ public class UserController {
             String password = user.getPassword()+userh.getUsername();
             password= DigestUtils.md5DigestAsHex(password.getBytes());
             if(password.equals(userh.getPassword())) {
-                request.getSession().setAttribute("user", userh.getId());
+                String token = TokenUtil.tokenCreate(userh.getId());
+                response.setHeader("Access-Control-Expose-Headers", "Authorization");
+                response.addHeader("Authorization",token);
                 return R.success(userh);
             }
             return R.error("登陆失败，请检查用户名或密码是否正确！");

@@ -4,8 +4,9 @@ package com.gameForum.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gameForum.common.R;
 import com.gameForum.entity.Article;
+import com.gameForum.entity.ArticleType;
 import com.gameForum.service.ArticleService;
-import com.google.common.collect.Interner;
+import com.gameForum.service.ArticleTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,66 +23,39 @@ import java.util.List;
  * @since 2023-04-21
  */
 @RestController
-@RequestMapping("/article")
-@Api(tags = "帖子接口")
-public class ArticleController {
+@RequestMapping("/articleType")
+@Api(tags = "帖子类型接口")
+public class ArticleTypeController {
     @Autowired
-    private ArticleService articleService;
+    private ArticleTypeService articleTypeService;
 
 
-    @PostMapping("/save")
-    @ApiOperation("发帖")
-    public R<String> save(@RequestBody Article article){
-        articleService.save(article);
-        return R.success("发帖成功！");
+    @PostMapping("/add")
+    @ApiOperation("添加类型")
+    public R<String> save(@RequestBody ArticleType articleType){
+        articleTypeService.save(articleType);
+        return R.success("添加成功！");
     }
 
 
     @GetMapping("/all")
-    @ApiOperation("获取全部帖子")
-    public R<List<Article>> getAll(){
-        List<Article> list = articleService.list();
-
-        return R.success(list);
-
-    }
-
-    @GetMapping("/game")
-    @ApiOperation("根据游戏获取帖子")
-    public R<List<Article>> getByGame(Integer gameId){
-        LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Article::getGameId,gameId);
-        List<Article> list = articleService.list(lambdaQueryWrapper);
-
+    @ApiOperation("获取全部类型")
+    public R<List<ArticleType>> getAll(){
+        List<ArticleType> list = articleTypeService.list();
         return R.success(list);
     }
 
-    @GetMapping("/getById")
-    @ApiOperation("根据id获取帖子")
-    public R<Article> getById(Integer id){
-        Article article = articleService.getById(id);
-        if(article == null){
-            return R.error("该帖子被吃掉了喵~");
-        }
-        return R.success(article);
+    @PutMapping("/update")
+    @ApiOperation("更新类型")
+    public R<String> update(@RequestBody ArticleType articleType){
+        articleTypeService.updateById(articleType);
+        return R.success("更新成功!");
     }
-
-    @GetMapping("/byTitle")
-    @ApiOperation("根据标题获取帖子")
-    public R<List<Article>> getByTitle(String title){
-        LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.like(Article::getTitle,title);
-        List<Article> list = articleService.list(lambdaQueryWrapper);
-
-        return R.success(list);
-
-    }
-
 
     @DeleteMapping("/delete")
-    @ApiOperation("删帖")
-    public R<String> deleted(@RequestBody Article article){
-        articleService.removeById(article);
+    @ApiOperation("删除类型")
+    public R<String> deleted(@RequestBody ArticleType articleType){
+        articleTypeService.removeById(articleType.getId());
         return R.success("删除成功");
     }
 

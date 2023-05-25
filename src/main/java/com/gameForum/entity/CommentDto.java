@@ -9,7 +9,9 @@ public class CommentDto extends Comment{
     //是否点赞
     private boolean flag = false;
 
-    private String usrName;
+    private List<CommentDto> list;
+
+    private String userName;
 
     private String img;
 

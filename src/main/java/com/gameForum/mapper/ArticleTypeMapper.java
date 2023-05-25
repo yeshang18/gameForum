@@ -1,7 +1,8 @@
 package com.gameForum.mapper;
 
-import com.gameForum.entity.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gameForum.entity.Article;
+import com.gameForum.entity.ArticleType;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,6 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2023-04-21
  */
 @Mapper
-public interface ArticleMapper extends BaseMapper<Article> {
+public interface ArticleTypeMapper extends BaseMapper<ArticleType> {
 
 }

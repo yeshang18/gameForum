@@ -1,6 +1,7 @@
 package com.gameForum.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gameForum.common.R;
 import com.gameForum.entity.Platform;
 import com.gameForum.service.PlatformService;
@@ -28,9 +29,11 @@ public class PlatformController {
 
     @GetMapping("/getAll")
     @ApiOperation("获取所有平台")
-    public R<List<Platform>> getAll(){
-        List<Platform> list = platformService.list();
-        return R.success(list);
+    public R<Page<Platform>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
+        Page<Platform> pageInfo = new Page<>(pageNo,pageSize);
+        platformService.page(pageInfo);
+        return R.success(pageInfo);
     }
 
     @PostMapping("/add")

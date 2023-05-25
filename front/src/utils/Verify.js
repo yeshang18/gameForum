@@ -7,14 +7,15 @@ const regs = {
 const verity =(rule,value,reg,callback)=>{
     if(value){
         if(reg.test(value)){
-            callback
+            callback()
+          //  console.log("1111")
         }
         else{
             callback(new Error(rule.message))
         }
     }
     else{
-        callback
+        callback()
     }
 }
 

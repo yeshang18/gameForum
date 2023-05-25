@@ -2,7 +2,11 @@ package com.gameForum.mapper;
 
 import com.gameForum.entity.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gameForum.entity.ArticleDto;
+import com.google.common.collect.Interner;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +19,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ArticleMapper extends BaseMapper<Article> {
 
+    List<ArticleDto> selectArticleByTitle(String title, Integer pageNo,Integer pageSize,Integer userId);
+
+    List<ArticleDto> selectArticleByGame(Integer gameId,Integer pageNo,Integer pageSize,Integer userId);
+
+    ArticleDto selectArticleById(Integer id,Integer userId);
 }

@@ -40,7 +40,7 @@ public class LikeRecordController {
     public R<String> save(@RequestBody LikeRecord likeRecord){
         likeRecordService.save(likeRecord);
         Article article =  articleService.getById(likeRecord.getArticleId());
-        article.setLike(article.getLike()+1);
+        article.setLikes(article.getLikes()+1);
         articleService.updateById(article);
         return R.success("操作成功！");
     }
@@ -55,7 +55,7 @@ public class LikeRecordController {
 
         likeRecordService.remove(lambdaQueryWrapper);
         Article article =  articleService.getById(likeRecord.getArticleId());
-        article.setLike(article.getLike()-1);
+        article.setLikes(article.getLikes()-1);
         articleService.updateById(article);
 
         return R.success("操作成功");

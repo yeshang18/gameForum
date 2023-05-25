@@ -4,9 +4,16 @@ import Home from "../views/Home.vue"
 const routes = [
   {
     path:'/',
-    component:Home
+    component:Home,
+    children:[{
+      path:"/end",
+      component:()=>import('../views/End.vue')
+    },
+    {
+      path:"/",
+      component:()=>import('../views/ArticleList.vue')
+    }]
   },
-  
 ]
 
 const router = createRouter({
