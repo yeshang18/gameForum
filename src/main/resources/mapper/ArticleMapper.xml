@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gameForum.mapper.ArticleMapper">
+    <resultMap id="baseMap" type="com.gameForum.entity.ArticleDto">
+    </resultMap>
+
+    <select id="selectArticleByTitle" resultType="com.gameForum.entity.ArticleDto" resultMap="baseMap">
+        SELECT article.*,a.name as game_name,user.user_name,c.type_name FROM article
+            INNER JOIN (SELECT id,name FROM game) a ON article.game_id=a.id
+            INNER JOIN (SELECT id,name as user_name FROM user) user on article.user_id = user.id
+            inner JOIN (SELECT id,type_name FROM article_type) c ON article.article_type_id = c.id
+            WHERE article.title like #{title} order by article.update_time Desc;
+    </select>
+    <select id="selectArticleByGame" resultType="com.gameForum.entity.ArticleDto" resultMap="baseMap">
+        SELECT article.*,a.name as game_name,user.user_name,c.type_name FROM article
+             INNER JOIN (SELECT id,name FROM game) a ON article.game_id=a.id
+             INNER JOIN (SELECT id,name as user_name FROM user) user on article.user_id = user.id
+             inner JOIN (SELECT id,type_name FROM article_type) c ON article.article_type_id = c.id
+        WHERE article.game_id = #{gameId} order by article.update_time Desc;
+    </select>
+    <select id="selectArticleById" resultType="com.gameForum.entity.ArticleDto" resultMap="baseMap">
+        SELECT article.*,a.name as game_name,user.user_name,c.type_name FROM article
+             INNER JOIN (SELECT id,name FROM game) a ON article.game_id=a.id
+             INNER JOIN (SELECT id,name as user_name FROM user) user on article.user_id = user.id
+             inner JOIN (SELECT id,type_name FROM article_type) c ON article.article_type_id = c.id
+        WHERE article.id= #{id};
+    </select>
+</mapper>
