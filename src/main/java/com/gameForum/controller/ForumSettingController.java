@@ -1,10 +1,10 @@
 package com.gameForum.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gameForum.common.R;
-import com.gameForum.entity.ArticleType;
-import com.gameForum.entity.ForumSetting;
+import com.gameForum.entity.*;
 import com.gameForum.service.ArticleTypeService;
 import com.gameForum.service.ForumSettingService;
 import com.gameForum.utils.TokenUtil;
@@ -57,10 +57,19 @@ public class ForumSettingController {
 
     @GetMapping("/getAll")
     @ApiOperation("获取全部设置")
-    public R<Page<ForumSetting>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+    public R<PageInfo<ForumSettingDto>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
                                         @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
-        Page<ForumSetting> pageInfo  = new Page<>(pageNo,pageSize);
-        forumSettingService.page(pageInfo);
+        pageNo = (pageNo-1)*pageSize;
+        List<ForumSettingDto> list = forumSettingService.getAllToDto(pageNo, pageSize);
+
+        int count = forumSettingService.count();
+        PageInfo<ForumSettingDto> pageInfo = new PageInfo<>();
+        pageInfo.setTotal(count);
+        pageInfo.setSize(pageSize);
+        pageInfo.setCurrent(pageNo);
+        pageInfo.setRecords(list);
+        Integer pages =(int) Math.ceil((double) count/pageSize);
+        pageInfo.setPages(pages);
         return R.success(pageInfo);
     }
 

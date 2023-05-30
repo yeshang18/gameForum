@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gameForum.mapper.GameMapper">
+    <resultMap id="baseMap" type="com.gameForum.entity.GameDto">
+    </resultMap>
+
+    <select id="selectAllToDto" resultType="com.gameForum.entity.GameDto" resultMap="baseMap">
+        select game.*,game_type_name,platform_name,create_user_name,update_user_name from game
+            left join (select id,type_name as game_type_name from game_type) a on game.type = a.id
+            left join (select id,platform_name from platform) b on b.id = game.platform
+            left join (select id,name as create_user_name from user) u1 on u1.id = game.create_user
+            left join (select id,name as update_user_name from user) u2 on u2.id = game.update_user
+                      where game.deleted=0 and game.status = #{status}
+        <if test="pageSize!=-1">
+            Limit #{pageNo},#{pageSize}
+        </if>
+    </select>
 
 </mapper>

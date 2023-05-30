@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gameForum.entity.Article;
 import com.gameForum.entity.ArticleDto;
 import com.gameForum.entity.ForumSetting;
+import com.gameForum.entity.ForumSettingDto;
 
 import java.util.List;
 
@@ -16,5 +17,5 @@ import java.util.List;
  * @since 2023-04-21
  */
 public interface ForumSettingService extends IService<ForumSetting> {
-
+    List<ForumSettingDto> getAllToDto(Integer pageNo, Integer pageSize);
 }

@@ -100,13 +100,13 @@ const getPlatform = () => {
         }
     })
 }
-
+//获取文章类型
 const articleTypeInfo = ref({});
 const getArticleType =()=>{
-    getArticleTypeApi().then(res=>{
+    getArticleTypeApi(1,-1).then(res=>{
         const data = res.data;
         if(data.code==200){
-            articleTypeInfo.value = data.data;
+            articleTypeInfo.value = data.data.records;
         }
     })
 }
@@ -195,7 +195,8 @@ const loadArticle = (pageNo,pageSize)=>{
 }
 
 const clickGame=(gameId) =>{
-    getArticleByGame(gameId)
+    nowTypeId.value=0;
+    getArticleByGame(gameId);
 }
 
 </script>

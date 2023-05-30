@@ -3,6 +3,9 @@ package com.gameForum.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gameForum.entity.Article;
 import com.gameForum.entity.ArticleType;
+import com.gameForum.entity.ArticleTypeDto;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,5 +16,5 @@ import com.gameForum.entity.ArticleType;
  * @since 2023-04-21
  */
 public interface ArticleTypeService extends IService<ArticleType> {
-
+    List<ArticleTypeDto> getAllToDto(Integer pageNo, Integer pageSize);
 }

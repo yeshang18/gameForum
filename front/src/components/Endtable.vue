@@ -5,11 +5,11 @@
             <el-table-column prop="platformName" label="名称" width="120" v-if="tableType==1"/>
             <el-table-column prop="typeName" label="名称" width="120" v-if="tableType==2"/>
             <el-table-column prop="name" label="名称" width="120" v-if="tableType==3"/>
-            <el-table-column prop="type" label="类型" width="120" v-if="tableType==3"/>
-            <el-table-column prop="platform" label="平台" width="120" v-if="tableType==3"/>
+            <el-table-column prop="gameTypeName" label="类型" width="120" v-if="tableType==3"/>
+            <el-table-column prop="platformName" label="平台" width="120" v-if="tableType==3"/>
             <el-table-column prop="description" label="描述" width="120" v-if="tableType==3"/>
-            <el-table-column prop="createUser" label="创建人" width="120" />
-            <el-table-column prop="updateUser" label="最后更新人" width="120" />
+            <el-table-column prop="createUserName" label="创建人" width="120" />
+            <el-table-column prop="updateUserName" label="最后更新人" width="120" />
             <el-table-column prop="createTime" label="创建时间" width="180" />
             <el-table-column prop="updateTime" label="最后更新时间" width="180" />
         
@@ -27,8 +27,8 @@
             <el-table-column prop="articleExp" label="发帖经验" width="100" v-if="tableType==2"/>
             <el-table-column prop="commentExp" label="评论经验" width="100" v-if="tableType==2"/>
             <el-table-column prop="dayExp" label="每日经验上限" width="120" v-if="tableType==2"/>
-            <el-table-column prop="createUser" :label="tClassType==2?'提交用户':'创建人'" width="120" />
-            <el-table-column prop="updateUser" label="最后更新人" width="120" />
+            <el-table-column prop="createUserName" :label="tClassType==2?'提交用户':'创建人'" width="120" />
+            <el-table-column prop="updateUserName" label="最后更新人" width="120" />
             <el-table-column prop="createTime" :label="tClassType==2?'提交时间':'创建时间'" width="180" />
             <el-table-column prop="updateTime" label="最后更新时间" width="180" />
         

@@ -4,8 +4,7 @@ package com.gameForum.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gameForum.common.R;
-import com.gameForum.entity.Article;
-import com.gameForum.entity.ArticleType;
+import com.gameForum.entity.*;
 import com.gameForum.service.ArticleService;
 import com.gameForum.service.ArticleTypeService;
 import com.gameForum.utils.TokenUtil;
@@ -58,11 +57,20 @@ public class ArticleTypeController {
 
     @GetMapping("/getAll")
     @ApiOperation("获取全部类型")
-    public R<Page<ArticleType>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
-                                       @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
-        Page<ArticleType> pageinfo = new Page<>(pageNo,pageSize);
-        articleTypeService.page(pageinfo);
-        return R.success(pageinfo);
+    public R<PageInfo<ArticleTypeDto>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+                                              @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
+        pageNo = (pageNo-1)*pageSize;
+        List<ArticleTypeDto> list = articleTypeService.getAllToDto(pageNo, pageSize);
+
+        int count = articleTypeService.count();
+        PageInfo<ArticleTypeDto> pageInfo = new PageInfo<>();
+        pageInfo.setTotal(count);
+        pageInfo.setSize(pageSize);
+        pageInfo.setCurrent(pageNo);
+        pageInfo.setRecords(list);
+        Integer pages =(int) Math.ceil((double) count/pageSize);
+        pageInfo.setPages(pages);
+        return R.success(pageInfo);
     }
 
     @PutMapping("/update")

@@ -50,7 +50,10 @@
         LEFT JOIN (SELECT id,type_name FROM article_type where deleted = 0) c ON article.article_type_id = c.id
         LEFT JOIN (SELECT article_id,count(*) as comments FROM comment where deleted = 0 GROUP BY article_id) d ON article.id=d.article_id
         left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id
-        WHERE article.user_id= #{byUserId} and deleted=0 order by article.update_time Desc limit #{pageNo},#{pageSize};
+        WHERE article.user_id= #{byUserId} and deleted=0 order by article.update_time Desc
+        <if test="pageSize!=-1">
+            Limit #{pageNo},#{pageSize}
+        </if>
     </select>
 
 </mapper>

@@ -4,7 +4,10 @@ package com.gameForum.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gameForum.common.R;
+import com.gameForum.entity.GameTypeDto;
+import com.gameForum.entity.PageInfo;
 import com.gameForum.entity.Platform;
+import com.gameForum.entity.PlatformDto;
 import com.gameForum.service.PlatformService;
 import com.gameForum.utils.TokenUtil;
 import io.swagger.annotations.Api;
@@ -32,13 +35,24 @@ public class PlatformController {
 
     @GetMapping("/getAll")
     @ApiOperation("获取所有平台")
-    public R<Page<Platform>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
-                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize,
-                                    @RequestParam(value="status",required = false,defaultValue = "1") Integer status){
+    public R<PageInfo<PlatformDto>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+                                           @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize,
+                                           @RequestParam(value="status",required = false,defaultValue = "1") Integer status){
+        pageNo = (pageNo - 1) * pageSize;
+
+        List<PlatformDto> list = platformService.getAllToDto(pageNo, pageSize, status);
+
         LambdaQueryWrapper<Platform> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Platform::getStatus,status);
-        Page<Platform> pageInfo = new Page<>(pageNo,pageSize);
-        platformService.page(pageInfo,lambdaQueryWrapper);
+        int count = platformService.count(lambdaQueryWrapper);
+        PageInfo<PlatformDto> pageInfo = new PageInfo<>();
+        pageInfo.setTotal(count);
+        pageInfo.setSize(pageSize);
+        pageInfo.setCurrent(pageNo);
+        pageInfo.setRecords(list);
+        Integer pages = (int) Math.ceil((double) count / pageSize);
+        pageInfo.setPages(pages);
+
         return R.success(pageInfo);
     }
 

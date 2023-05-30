@@ -2,6 +2,11 @@ package com.gameForum.service;
 
 import com.gameForum.entity.GameType;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gameForum.entity.GameTypeDto;
+import com.gameForum.entity.LikeRecord;
+import com.gameForum.entity.PageInfo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +17,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-04-21
  */
 public interface GameTypeService extends IService<GameType> {
-
+    List<GameTypeDto> getAllToDto(Integer pageNo, Integer pageSize, Integer status);
 }

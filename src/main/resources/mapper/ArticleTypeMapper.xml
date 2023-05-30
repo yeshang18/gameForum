@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gameForum.mapper.ArticleTypeMapper">
+    <resultMap id="baseMap" type="com.gameForum.entity.ArticleTypeDto">
+    </resultMap>
+
+    <select id="selectAllToDto" resultType="com.gameForum.entity.ArticleTypeDto" resultMap="baseMap">
+        select article_type.*,create_user_name,update_user_name from article_type
+            left join (select id,name as create_user_name from user) u1 on u1.id = article_type.create_user
+            left join (select id,name as update_user_name from user) u2 on u2.id = article_type.update_user
+            where article_type.deleted=0
+        <if test="pageSize!=-1">
+            Limit #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+</mapper>

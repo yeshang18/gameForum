@@ -4,8 +4,7 @@ package com.gameForum.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gameForum.common.R;
-import com.gameForum.entity.Game;
-import com.gameForum.entity.PageInfo;
+import com.gameForum.entity.*;
 import com.gameForum.service.GameService;
 import com.gameForum.utils.TokenUtil;
 import io.swagger.annotations.Api;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.ClientInfoStatus;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,13 +65,24 @@ public class GameController {
 //    }
     @GetMapping("/getAll")
     @ApiOperation("获取所有游戏")
-    public R<Page<Game>> getALl(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+    public R<PageInfo<GameDto>> getALl(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
                                 @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize,
                                 @RequestParam(value="status",required = false,defaultValue = "1") Integer status){
+        pageNo = (pageNo-1)*pageSize;
+        List<GameDto> list = gameService.getAllToDto(pageNo, pageSize, status);
+
+
         LambdaQueryWrapper<Game> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Game::getStatus,status);
-        Page<Game> pageInfo = new Page<>(pageNo,pageSize);
-        gameService.page(pageInfo,lambdaQueryWrapper);
+        int count = gameService.count(lambdaQueryWrapper);
+        PageInfo<GameDto> pageInfo = new PageInfo<>();
+        pageInfo.setTotal(count);
+        pageInfo.setSize(pageSize);
+        pageInfo.setCurrent(pageNo);
+        pageInfo.setRecords(list);
+        Integer pages =(int) Math.ceil((double) count/pageSize);
+        pageInfo.setPages(pages);
+
         return R.success(pageInfo);
     }
 

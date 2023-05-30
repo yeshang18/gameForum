@@ -3,7 +3,7 @@
     <el-container class="layout-container-demo" style="height: calc(100vh - 60px)">
     <el-aside width="200px">
       <el-scrollbar>
-        <el-menu :default-openeds="['1', '3']">
+        <el-menu :default-openeds="['1', '2','3']">
           <el-sub-menu index="1">
             <template #title>
               <el-icon><icon-menu /></el-icon>游戏相关管理
@@ -16,10 +16,6 @@
             <el-menu-item-group title="游戏详情">
               <el-menu-item index="1-3" @click="showTable(1,3)">游戏列表</el-menu-item>
             </el-menu-item-group>
-            <el-sub-menu index="1-4">
-              <template #title>Option4</template>
-              <el-menu-item index="1-4-1">Option 4-1</el-menu-item>
-            </el-sub-menu>
           </el-sub-menu>
           <el-sub-menu index="2">
             <template #title>
@@ -114,9 +110,42 @@ import { getUserByIdApi,getGameByTypeApi,getGameApi,getPlatformApi,getGameTypeAp
 import Endtable from '@/components/Endtable.vue';
 import { getArticleTypeApi } from '@/api';
 import { getforumSettingApi } from '@/api';
+import { useRouter } from 'vue-router';
 const { proxy } = getCurrentInstance();
 
 const store =useStore();
+const router = useRouter();
+
+//检测用户
+onMounted(()=>{
+  if(proxy.VueCookies.isKey("loginInfo")){
+    let id = proxy.VueCookies.get("loginInfo").id;
+    getUserByIdApi(id).then(res=>{
+            const data= res.data;
+            if(data.code == 200){
+
+                if(data.data.power!==1){
+                  router.push("/");
+                  proxy.Message.error("非管理员用户");
+                }
+            }
+            else{
+              router.push("/");
+              proxy.Message.error("非管理员用户");
+            }
+        })
+
+  }
+  else{
+      router.push("/");
+      store.commit("showLogin",true);
+    }
+ 
+})
+
+
+
+
 
 //formData
 const dataRow =ref({});

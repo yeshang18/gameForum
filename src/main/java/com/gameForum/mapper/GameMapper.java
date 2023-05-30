@@ -2,7 +2,11 @@ package com.gameForum.mapper;
 
 import com.gameForum.entity.Game;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gameForum.entity.GameDto;
+import com.gameForum.entity.PageInfo;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +19,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface GameMapper extends BaseMapper<Game> {
 
+    List<GameDto> selectAllToDto(Integer pageNo, Integer pageSize, Integer status);
 }

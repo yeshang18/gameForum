@@ -4,9 +4,7 @@ package com.gameForum.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gameForum.common.R;
-import com.gameForum.entity.Game;
-import com.gameForum.entity.GameType;
-import com.gameForum.entity.Platform;
+import com.gameForum.entity.*;
 import com.gameForum.service.GameTypeService;
 import com.gameForum.utils.TokenUtil;
 import io.swagger.annotations.Api;
@@ -34,13 +32,23 @@ public class GameTypeController {
 
     @GetMapping("/getAll")
     @ApiOperation("获取所有游戏类型")
-    public R<Page<GameType>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
-                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize,
-                                    @RequestParam(value="status",required = false,defaultValue = "1") Integer status){
-        LambdaQueryWrapper<GameType> lambdaQueryWrapper =new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(GameType::getStatus,status);
-        Page<GameType> pageInfo = new Page<>(pageNo,pageSize);
-        gameTypeService.page(pageInfo,lambdaQueryWrapper);
+    public R<PageInfo<GameTypeDto>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
+                                           @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize,
+                                           @RequestParam(value="status",required = false,defaultValue = "1") Integer status) {
+        pageNo = (pageNo - 1) * pageSize;
+
+        List<GameTypeDto> list = gameTypeService.getAllToDto(pageNo, pageSize, status);
+        LambdaQueryWrapper<GameType> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(GameType::getStatus, status);
+        int count = gameTypeService.count(lambdaQueryWrapper);
+        PageInfo<GameTypeDto> pageInfo = new PageInfo<>();
+        pageInfo.setTotal(count);
+        pageInfo.setSize(pageSize);
+        pageInfo.setCurrent(pageNo);
+        pageInfo.setRecords(list);
+        Integer pages = (int) Math.ceil((double) count / pageSize);
+        pageInfo.setPages(pages);
+
         return R.success(pageInfo);
     }
 

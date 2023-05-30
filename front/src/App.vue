@@ -1,7 +1,9 @@
 <template>
+  <div class="app-index">
   <el-config-provider :locale="locale" :message="config">
     <router-view />
   </el-config-provider>
+</div>
     
 </template>
 
@@ -18,6 +20,10 @@
 </script>
 
 <style>
+.app-index{
+
+}
+
 body{
   background-image: url(./assets/bg/bg5.jpg);
   background-position: 50% 50%;

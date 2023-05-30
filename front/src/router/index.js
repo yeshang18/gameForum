@@ -29,8 +29,13 @@ const routes = [
         path:"/feedback",
         component:()=>import('../views/Feedback.vue')
       },
+      {
+        path:"/index",
+        component:()=>import('../views/Index.vue')
+      }
     ]
   },
+
 ]
 
 const router = createRouter({

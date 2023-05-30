@@ -16,8 +16,8 @@
             </div>
             <div class="top-text">
                 <div class="menu">
-                    <a class="menu" href="#">首页</a>
-                    <a class="menu" href="#">论坛</a>
+                    <a class="menu" href="#"><RouterLink to="/index">首页</RouterLink></a>
+                    <a class="menu" href="#"><RouterLink to="/">论坛</RouterLink></a>
                     <a class="menu" href="#"><RouterLink to="/feedback">反馈</RouterLink></a>
                     <a class="menu" href="#" v-if="userInfo.power == 1"><RouterLink to="/end">管理</RouterLink></a>
                 </div>
@@ -99,14 +99,13 @@ const loginAndRegister = (type)=>{
 onMounted(()=>{
     // initScroll();
     getUserInfo();
-
 });
 //获取用户信息
-const getUserInfo =()=>{
+const getUserInfo =async()=>{
     if(proxy.VueCookies.isKey("loginInfo")){
         let id = proxy.VueCookies.get("loginInfo").id;
         
-        getUserByIdApi(id).then(res=>{
+    await getUserByIdApi(id).then(res=>{
             const data= res.data;
             if(data.code == 200){
                 store.commit("updateLoginUserInfo",data.data)
@@ -120,6 +119,8 @@ const getUserInfo =()=>{
         return;
     }
 }
+
+
 
 //退出登陆
 const loginOut =() =>{

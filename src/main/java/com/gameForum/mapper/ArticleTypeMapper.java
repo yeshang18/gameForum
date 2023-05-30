@@ -3,7 +3,11 @@ package com.gameForum.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gameForum.entity.Article;
 import com.gameForum.entity.ArticleType;
+import com.gameForum.entity.ArticleTypeDto;
+import com.gameForum.entity.GameTypeDto;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,5 +19,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ArticleTypeMapper extends BaseMapper<ArticleType> {
-
+    List<ArticleTypeDto> selectAllToDto(Integer pageNo, Integer pageSize);
 }
