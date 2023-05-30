@@ -12,9 +12,7 @@
             LEFT JOIN (SELECT id,name as user_name FROM user where deleted = 0) user on article.user_id = user.id
             LEFT JOIN (SELECT id,type_name FROM article_type where deleted = 0) c ON article.article_type_id = c.id
             LEFT JOIN (SELECT article_id,count(*) as comments FROM comment where deleted = 0 GROUP BY article_id) d ON article.id=d.article_id
-            <if test="userId!=null" >
             left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id
-            </if>
             WHERE article.title like #{title} and deleted=0 order by article.is_top Desc,article.update_time Desc limit #{pageNo},#{pageSize};
     </select>
     <select id="selectArticleByGame" resultType="com.gameForum.entity.ArticleDto" resultMap="baseMap">
@@ -25,9 +23,7 @@
             LEFT JOIN (SELECT id,name as user_name FROM user where deleted = 0) user on article.user_id = user.id
             LEFT JOIN (SELECT id,type_name FROM article_type where deleted = 0) c ON article.article_type_id = c.id
             LEFT JOIN (SELECT article_id,count(*) as comments FROM comment where deleted = 0 GROUP BY article_id) d ON article.id=d.article_id
-        <if test="userId!=null" >
             left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id
-        </if>
             WHERE article.game_id = #{gameId}
         <if test="articleTypeId!=0">
             and article_type_id = #{articleTypeId}
@@ -42,9 +38,7 @@
             LEFT JOIN (SELECT id,name as user_name FROM user where deleted = 0) user on article.user_id = user.id
             LEFT JOIN (SELECT id,type_name FROM article_type where deleted = 0) c ON article.article_type_id = c.id
             LEFT JOIN (SELECT article_id,count(*) as comments FROM comment where deleted = 0 GROUP BY article_id) d ON article.id=d.article_id
-            <if test="#{userId}!=null" >
             left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id
-            </if>
             WHERE article.id= #{id} and deleted=0;
     </select>
     <select id="selectArticleByUser" resultType="com.gameForum.entity.UserDto" resultMap="baseMap">
@@ -55,9 +49,7 @@
         LEFT JOIN (SELECT id,name as user_name FROM user where deleted = 0) user on article.user_id = user.id
         LEFT JOIN (SELECT id,type_name FROM article_type where deleted = 0) c ON article.article_type_id = c.id
         LEFT JOIN (SELECT article_id,count(*) as comments FROM comment where deleted = 0 GROUP BY article_id) d ON article.id=d.article_id
-        <if test="userId!=null" >
-            left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id
-        </if>
+        left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id
         WHERE article.user_id= #{byUserId} and deleted=0 order by article.update_time Desc limit #{pageNo},#{pageSize};
     </select>
 

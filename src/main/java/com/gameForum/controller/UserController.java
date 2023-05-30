@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -197,7 +198,21 @@ public class UserController {
 
     @PutMapping("/integral/add")
     @ApiOperation("积分增加")
-    public R<String> addScore(@RequestBody User user,Integer num){
+    public R<String> addScore(HttpServletRequest request,Integer num){
+        String token =request.getHeader("Authorization").split(" ")[1];
+        Integer userId = null;
+        if(!token.equals("null")){
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+            }
+            else {
+                return R.success("未登录，不予记录");
+            }
+        }
+        else{
+            return R.success("未登录，不予记录");
+        }
+        User user = userService.getById(userId);
         user.setIntegral(user.getIntegral()+num);
         userService.updateById(user);
         return R.success("操作成功!");
@@ -205,7 +220,24 @@ public class UserController {
 
     @PutMapping("/integral/reduce")
     @ApiOperation("积分减少")
-    public R<String> reduceScore(@RequestBody User user,Integer num){
+    public R<String> reduceScore(HttpServletRequest request,
+                                 @RequestParam(value = "num",required = false,defaultValue = "5") Integer num){
+
+        String token =request.getHeader("Authorization").split(" ")[1];
+        Integer userId = null;
+        if(!token.equals("null")){
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+            }
+            else {
+                return R.success("未登录，不予记录");
+            }
+        }
+        else{
+            return R.success("未登录，不予记录");
+        }
+        User user = userService.getById(userId);
+
         if(user.getIntegral()-num<0){
             return R.error("操作异常!");
         }
@@ -216,7 +248,27 @@ public class UserController {
 
     @PutMapping("/level")
     @ApiOperation("经验增加")
-    public R<String> addLevel(@RequestBody User user,Integer num){
+    public R<String> addLevel(HttpServletRequest request,Integer num,@RequestParam(value = "dayExp",required = false,defaultValue = "66")Integer dayExp ){
+        String token =request.getHeader("Authorization").split(" ")[1];
+        Integer userId = null;
+        if(!token.equals("null")){
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+            }
+            else {
+                return R.success("未登录，不予记录");
+            }
+        }
+        else{
+            return R.success("未登录，不予记录");
+        }
+        User user = userService.getById(userId);
+        if(Objects.equals(user.getDayLevel(), dayExp)){
+            return R.success("已达经验上限！");
+        }
+        if(user.getDayLevel()+num>dayExp){
+            num = dayExp-user.getDayLevel();
+        }
         user.setLevel(user.getLevel()+num);
         userService.updateById(user);
         return R.success("操作成功！");

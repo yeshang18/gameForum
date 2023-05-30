@@ -45,7 +45,7 @@
 <script setup>
 import CommentList from "./CommentList.vue"
 import { ref, getCurrentInstance, nextTick,onMounted } from "vue"
-import { getArticleByIdApi,saveLikeApi,deleteLikeApi } from "@/api";
+import { getArticleByIdApi,saveLikeApi,deleteLikeApi,saveViewApi } from "@/api";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 const { proxy } = getCurrentInstance();
@@ -67,7 +67,24 @@ const getArticleById = (articleId)=>{
 
 onMounted(()=>{
     getArticleById(route.params.articleId)
+    setTimeout(() => {
+        postViewHandle(route.params.articleId)
+    }, 10*1000);
 })
+
+const postViewHandle=(id)=>{
+    saveViewApi({articleId:id}).then(res=>{
+        const data = res.data;
+        if(data.code==200){
+            return;
+        }
+        else{
+            proxy.Message.error("系统繁忙");
+        }
+    })
+}
+
+
 
 const goToPostion= (domId)=>{
     const toTop =  document.querySelector("#"+domId).scrollHeight;

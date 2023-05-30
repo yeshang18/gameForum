@@ -10,11 +10,11 @@
             </template>
             <el-menu-item-group>
               <template #title>游戏分类</template>
-              <el-menu-item index="1-1" @click="showTable(1)">游戏平台</el-menu-item>
-              <el-menu-item index="1-2" @click="showTable(2)">游戏类型</el-menu-item>
+              <el-menu-item index="1-1" @click="showTable(1,1)">游戏平台</el-menu-item>
+              <el-menu-item index="1-2" @click="showTable(1,2)">游戏类型</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="游戏详情">
-              <el-menu-item index="1-3" @click="showTable(3)">游戏列表</el-menu-item>
+              <el-menu-item index="1-3" @click="showTable(1,3)">游戏列表</el-menu-item>
             </el-menu-item-group>
             <el-sub-menu index="1-4">
               <template #title>Option4</template>
@@ -27,18 +27,18 @@
             </template>
             <el-menu-item-group>
               <template #title>平台反馈</template>
-              <el-menu-item index="2-1">添加平台</el-menu-item>
-              <el-menu-item index="2-2">修改平台</el-menu-item>
+              <el-menu-item index="2-1" @click="showTable(2,1)">添加平台</el-menu-item>
+              <!-- <el-menu-item index="2-2">修改平台</el-menu-item> -->
             </el-menu-item-group>
             <el-menu-item-group>
               <template #title>类型反馈</template>
-              <el-menu-item index="2-3">添加类型</el-menu-item>
-              <el-menu-item index="2-4">修改类型</el-menu-item>
+              <el-menu-item index="2-3" @click="showTable(2,2)">添加类型</el-menu-item>
+              <!-- <el-menu-item index="2-4">修改类型</el-menu-item> -->
             </el-menu-item-group>
             <el-menu-item-group>
               <template #title>游戏反馈</template>
-              <el-menu-item index="2-5">添加游戏</el-menu-item>
-              <el-menu-item index="2-6">修改游戏</el-menu-item>
+              <el-menu-item index="2-5" @click="showTable(2,3)">添加游戏</el-menu-item>
+              <!-- <el-menu-item index="2-6">修改游戏</el-menu-item> -->
             </el-menu-item-group>
           </el-sub-menu>
           <el-sub-menu index="3">
@@ -47,10 +47,10 @@
             </template>
             <el-menu-item-group>
               <template #title>文章类型</template>
-              <el-menu-item index="3-1">类型详情</el-menu-item>
+              <el-menu-item index="3-1" @click="showTable(3,1)">类型详情</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="发帖收益">
-              <el-menu-item index="3-2">积分经验</el-menu-item>
+              <el-menu-item index="3-2" @click="showTable(3,2)">积分经验</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
         </el-menu>
@@ -58,113 +58,133 @@
     </el-aside>
 
     <el-container>
-      <el-header style="text-align: center; font-size: 12px">
-        <div class="toolbar">
-          <el-button type="primary" @click="insertShow(tableType,0,null)">添加</el-button>
-          <span style="display: flex; font-size: 15px;"><RouterLink to="/">&lt返回论坛</RouterLink></span>
-        </div>
-      </el-header>
-
       <el-main>
         <el-scrollbar>
-          <el-table :data="tableInfo.records" max-height="85vh" stripe>
-            <el-table-column prop="id" label="id" width="100" />
-            <el-table-column prop="platformName" label="名称" width="120" v-if="tableType==1"/>
-            <el-table-column prop="typeName" label="名称" width="120" v-if="tableType==2"/>
-            <el-table-column prop="name" label="名称" width="120" v-if="tableType==3"/>
-            <el-table-column prop="type" label="类型" width="120" v-if="tableType==3"/>
-            <el-table-column prop="platform" label="平台" width="120" v-if="tableType==3"/>
-            <el-table-column prop="description" label="描述" width="120" v-if="tableType==3"/>
-            <el-table-column prop="createUser" label="创建人" width="120" />
-            <el-table-column prop="updateUser" label="最后更新人" width="120" />
-            <el-table-column prop="createTime" label="创建时间" width="180" />
-            <el-table-column prop="updateTime" label="最后更新时间" width="180" />
-            <el-table-column fixed="right" label="操作" width="120">
-                <template #default = "scope">
-                    <el-button link type="primary" size="small" @click="handleClick(tableType,scope.row.id)">删除</el-button>
-                    <el-button link type="primary" size="small" @click="insertShow(tableType,1,scope.row)">更新</el-button>
-                </template>
-            </el-table-column>
-          </el-table>
-          <div class="pagination" v-if="tableType==3">
-            <el-pagination
-            v-if="tableInfo.pages>1"
-            background
-            :page-size="tableInfo.size"
-            :current-page.sync="tableInfo.current"
-            layout="prev, pager, next"
-            @current-change="handlePageNoChange"
-            :total="tableInfo.total"
-            style="text-align: right;"
-          />
-        </div>
+          <div class="main-info">
+            <div class="table-area">
+              <el-card :body-style="{padding:'5px'}">
+              <template #header>
+                <div class="table-title">
+                  <span>信息</span>
+                </div>
+              </template>
+            <div class="table-info">
+            <Endtable :table-info="tableInfo" 
+            :t-class-type="tClassType" 
+            :table-type="tableType" 
+            @delete-handle="deleteHandle"
+            @pageNoHandle="pageNoHandle"
+            @updateHandle="updateHandle"></Endtable>
+          </div>
+        </el-card>
+    </div>
+    <div class="insert-update">
+        <el-card class="box-card">
+          <template #header>
+            <span>{{ insertFlag==0?'新增':'更新' }}</span> 
+            <span class="return-insert" @click="returnInsertHandle()" v-if="insertFlag==1">
+              返回新增
+            </span>
+          </template>
+          <div class="form-info">
+            <EndInsert :t-class-type="tClassType" 
+            :table-type="tableType" 
+            :form-data="dataRow" 
+            :insert-flag="insertFlag"
+            @reload-info="reloadInfo"></EndInsert>
+          </div>
+        </el-card>
+    </div>
+  </div>
         </el-scrollbar>
       </el-main>
     </el-container>
   </el-container>
   </div>
-  <div>
-    <Insert ref = "insertRef"></Insert>
-  </div>
+
 </template>
 
 <script setup>
-import Insert from './Insert.vue';
+import EndInsert from '../components/EndInsert.vue'
 import { Menu as IconMenu, Message, Setting } from '@element-plus/icons-vue'
 
 import { ref,onMounted,watch,getCurrentInstance,reactive,} from 'vue';
 import { useStore } from 'vuex';
-import { getUserByIdApi,getGameByTypeApi,getGameApi,getPlatformApi,getGameTypeApi, deletePlatformApi, deleteGameTypeApi, deleteGameApi, } from "@/api";
+import { getUserByIdApi,getGameByTypeApi,getGameApi,getPlatformApi,getGameTypeApi, deletePlatformApi, deleteGameTypeApi, deleteGameApi, deleteArticleTypeApi, deleteForumSettingApi, } from "@/api";
+import Endtable from '@/components/Endtable.vue';
+import { getArticleTypeApi } from '@/api';
+import { getforumSettingApi } from '@/api';
 const { proxy } = getCurrentInstance();
 
 const store =useStore();
 
-const insertRef =ref()
-const insertShow = (type,UorI,data) =>{
-  if(data!=null){
-    let dataNew = JSON.parse(JSON.stringify(data));
-    insertRef.value.showTypeSet(type,UorI,dataNew);
-  }else{
-    insertRef.value.showTypeSet(type,UorI,data);
-  }
-} 
-
-
+//formData
+const dataRow =ref({});
 
 onMounted(()=>{
-    showTable(1);
+    showTable(1,1);
 })
+
+const returnInsertHandle=()=>{
+  insertFlag.value=0;
+  dataRow.value={};
+}
+
+const tClassType =ref(1);
+
 const tableType = ref(1);
-const showTable =(type)=>{
-    tableType.value=type;
-    getTableInfo(type);
+const showTable = async(cType,tType,pageNo=1,pageSize=10)=>{
+    insertFlag.value=0;
+    tClassType.value=cType
+    tableType.value=tType;
+    nowPageNo.value=pageNo;
+    nowPageSize.value=pageSize;
+    getTableInfo(cType,tType,pageNo,pageSize);
 }
 
 const tableInfo = ref({});
-// const gameInfo=ref({});
-// const gameTypeInfo = ref({});
-// const platformInfo =ref({});
 
-const getTableInfo=(type)=>{
-    if(type==1){
-        getPlatformInfo(1);
-        // tableInfo = platformInfo;
+const nowPageNo=ref(1);
+const nowPageSize=ref(10);
+
+const getTableInfo=(cType,tType,pageNo,pageSize)=>{
+
+  if(cType==1){
+    if(tType==1){
+        getPlatformInfo(pageNo,pageSize);
     }
-    else if(type==2){
-        getGameTypeInfo(1);
-        // tableInfo = gameTypeInfo;
+    else if(tType==2){
+        getGameTypeInfo(pageNo,pageSize);
     }
-    else if(type == 3){
-        getGameInfo(1);
-        // tableInfo = gameInfo;
+    else if(tType == 3){
+        getGameInfo(pageNo,pageSize);
     }
+  }
+  else if(cType==2){
+    if(tType==1){
+        getPlatformInfo(pageNo,pageSize,0);
+    }
+    else if(tType==2){
+        getGameTypeInfo(pageNo,pageSize,0);
+    }
+    else if(tType == 3){
+        getGameInfo(pageNo,pageSize,0);
+    }
+  }
+  else if(cType==3){
+    if(tType==1){
+       getArticleTypeInfo(pageNo,pageSize);
+    }
+    else if(tType==2){
+        getforumSettingInfo(pageNo,pageSize);
+    }
+  }
 }
 //获取平台信息
-const getPlatformInfo =(pageNo,pageSize) =>{
-    getPlatformApi(pageNo,pageSize).then(res=>{
+const getPlatformInfo =(pageNo,pageSize,status) =>{
+    getPlatformApi(pageNo,pageSize,status).then(res=>{
         const data = res.data;
         if(data.code==200){
-          // store.commit("updatePlatformInfo",data.data)
             tableInfo.value = data.data;
 
         }
@@ -174,11 +194,10 @@ const getPlatformInfo =(pageNo,pageSize) =>{
     })
 }
 //获取游戏类型
-const getGameTypeInfo =(pageNo,pageSize) =>{
-    getGameTypeApi(pageNo,pageSize).then(res=>{
+const getGameTypeInfo =(pageNo,pageSize,status) =>{
+    getGameTypeApi(pageNo,pageSize,status).then(res=>{
         const data = res.data;
         if(data.code==200){
-          // store.commit("updateGameTypeInfo",data.data)
           tableInfo.value = data.data;
         }
         else{
@@ -187,11 +206,10 @@ const getGameTypeInfo =(pageNo,pageSize) =>{
     })
 }
 //获取游戏信息
-const getGameInfo =(pageNo,pageSize) =>{
-    getGameApi(pageNo,pageSize).then(res=>{
+const getGameInfo =(pageNo,pageSize,status) =>{
+    getGameApi(pageNo,pageSize,status).then(res=>{
         const data = res.data;
         if(data.code==200){
-            // store.commit("updateGameInfo",data.data)
            tableInfo.value = data.data;
         }
         else{
@@ -199,118 +217,131 @@ const getGameInfo =(pageNo,pageSize) =>{
         }
     })
 }
-//分页
-const handlePageNoChange = (current)=>{
-  if(tableType.value==1){
-        getPlatformInfo(current);
-        // tableInfo = platformInfo;
-    }
-    else if(tableType.value==2){
-        getGameTypeInfo(current);
-        // tableInfo = gameTypeInfo;
-    }
-    else if(tableType.value == 3){
-        getGameInfo(current);
-        // tableInfo = gameInfo;
-    }
+//获取文章设置
+const getArticleTypeInfo=(pageNo,pageSize)=>{
+  getArticleTypeApi(pageNo,pageSize).then(res=>{
+    const data = res.data;
+        if(data.code==200){
+           tableInfo.value = data.data;
+        }
+        else{
+            tableInfo.value={}
+        }
+  })
+}
+
+//获取论坛设置
+const getforumSettingInfo=(pageNo,pageSize)=>{
+  getforumSettingApi(pageNo,pageSize).then(res=>{
+    const data = res.data;
+        if(data.code==200){
+           tableInfo.value = data.data;
+        }
+        else{
+            tableInfo.value={}
+        }
+  })
+}
+
+
+//分页拦截
+const pageNoHandle = (pageNo)=>{
+  showTable(tClassType.value,tableType.value,pageNo,nowPageSize.value);
+}
+
+//操作后刷新页面
+const reloadInfo = async()=>{
+  await showTable(tClassType.value,tableType.value,nowPageNo.value,nowPageSize.value);
+  console.log("刷新");
+  if(tableInfo.value.records.lenght==0&&nowPageNo.value>1){
+    showTable(tClassType.value,tableType.value,nowPageNo.value-1,nowPageSize.value)
+  }
 
 }
 
 
-watch(() =>store.state.updateFlag,
- (newVal, oldVal) => {
-    if(newVal==1){
-      getTableInfo(1);
+//删除拦截
+const deleteHandle = async(tClassType,tableType,id)=>{
+  if(tClassType==1||tClassType==2){
+    if(tableType == 1){
+      await deletePlatformApi(id).then(res=>{
+        const data = res.data;
+        if(data.code==200){
+          proxy.Message.success("删除成功");
+        }
+      })
     }
-    else if(newVal ==2){
-      getTableInfo(2);
+    else if(tableType == 2){
+      await deleteGameTypeApi(id).then(res=>{
+        const data = res.data;
+        if(data.code==200){
+          proxy.Message.success("删除成功");
+          // store.commit("setUpdateFlag",2);
+        }
+      })
     }
-    else if(newVal==3){
-      getTableInfo(3);
+    if(tableType == 3){
+      await deleteGameApi(id).then(res=>{
+        const data = res.data;
+        if(data.code==200){
+          proxy.Message.success("删除成功");
+          // store.commit("setUpdateFlag",3);
+        }
+      })
     }
-    store.commit("setUpdateFlag",0);
- }, { immediate: true, deep: true });
-// watch(
-//   () =>store.state.tableInfo, 
-//   (newVal, oldVal) => {
-//     if(newVal!=undefined&&newVal!=null){
-//         tableInfo.value=newVal;
-//     }
-//     // else{
-//     //   tableInfo.value={};
-//     // }
-//   }, { immediate: true, deep: true }
-// );
-// watch(() => store.state.gameInfo,
-// (newVal, oldVal) => {
-//     if(newVal!=undefined&&newVal!=null){
-//         gameInfo.value=newVal;
-//     }else{
-//         gameInfo.value={};
-//     }
-// }, 
-// { immediate: true, deep: true }
-// );
-
-// watch(() => store.state.gameTypeInfo,
-// (newVal, oldVal) => {
-//     if(newVal!=undefined&&newVal!=null){
-//         gameTypeInfo.value=newVal;
-//     }else{
-//         gameTypeInfo.value={};
-//     }
-// }, 
-// { immediate: true, deep: true }
-// );
-
-// watch(() => store.state.platformInfo,
-// (newVal, oldVal) => {
-//     if(newVal!=undefined&&newVal!=null){
-//         platformInfo.value=newVal;
-//     }
-//     else{
-//         platformInfo.value={};
-//     }
-// }, 
-// { immediate: true, deep: true }
-// );
-
-
-//删除更新拦截
-const handleClick =(type,id)=>{
-  if(type == 1){
-    deletePlatformApi(id).then(res=>{
-      const data = res.data;
-      if(data.code==200){
-        proxy.Message.success("删除成功");
-        store.commit("setUpdateFlag",1);
-      }
-    })
   }
-  else if(type == 2){
-    deleteGameTypeApi(id).then(res=>{
-      const data = res.data;
-      if(data.code==200){
-        proxy.Message.success("删除成功");
-        store.commit("setUpdateFlag",2);
-      }
-    })
+  else if(tClassType==3){
+    if(tableType==1){
+      await deleteArticleTypeApi({id:id}).then(res=>{
+        const data = res.data;
+        if(data.code==200){
+          proxy.Message.success("删除成功");
+        }
+      })
+    }
+    else if(tableType==2){
+      await deleteForumSettingApi({id:id}).then(res=>{
+        const data = res.data;
+        if(data.code==200){
+          proxy.Message.success("删除成功");
+        }
+      })
+    }
   }
-  if(type == 3){
-    deleteGameApi(id).then(res=>{
-      const data = res.data;
-      if(data.code==200){
-        proxy.Message.success("删除成功");
-        store.commit("setUpdateFlag",3);
-      }
-    })
-  }
+  reloadInfo();
 }
+
+
+
+const insertFlag = ref(0)
+//更新拦截
+const updateHandle = (data)=>{
+  dataRow.value = data;
+  insertFlag.value=1;
+}
+
+
 
 </script>
 
 <style lang="scss" scoped>
-  .pagination{
-    margin-top: 10px;
+  .main-info{
+    display: flex;
+    .table-area{
+      max-width: 1200px;
+      flex: 1;
+      margin-right: 10px;
+    }
+    .insert-update{
+      min-width: 470px;
+      width: 470px;
+      .return-insert{
+        font-size: 13px;
+        margin-left: 300px;
+        cursor: pointer;
+        color: #2366ff;
+      }
+    }
   }
+ 
 </style>

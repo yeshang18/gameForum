@@ -25,6 +25,10 @@ const routes = [
         path:"/user/:userId",
         component:()=>import('../views/Ucenter.vue')
       },
+      {
+        path:"/feedback",
+        component:()=>import('../views/Feedback.vue')
+      },
     ]
   },
 ]

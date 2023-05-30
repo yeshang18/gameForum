@@ -65,6 +65,8 @@ public class User implements Serializable {
      */
     private Integer level;
 
+    private Integer dayLevel;
+
     /**
      * 0为普通账号，1为管理员
      */

@@ -26,17 +26,40 @@ export const updateUserApi = (data) =>{
 }
 // 批量获取用户
 // 封禁用户
+export const stopUserApi = (data) =>{
+    return request.put('/user/status/0',data,{
+    })
+}
 // 解封用户
+export const openUserApi = (data) =>{
+    return request.put('/user/status/1',data,{
+    })
+}
 // 增加积分
+export const addintegralApi = (num) =>{
+    return request.put('/user/integral/add?num='+num,{
+    })
+}
 // 减少积分
+export const reduceintegralApi = (num) =>{
+    return request.put('/user/integral/reduce?num='+num,{
+    })
+}
 // 增加经验
+export const addLevelApi = (num,dayExp) =>{
+    return request.put('/user/level',{params:{num,dayExp}
+    })
+}
 // 注销账户
-
+export const deleteUserApi = (data) =>{
+    return request.delete('/user/level',data,{
+    })
+}
 
 /*---------------平台相关------------*/
 //获取平台
-export const getPlatformApi = (pageNo,pageSize) =>{
-    return request.get('/platform/getAll',{params:{pageNo,pageSize}})
+export const getPlatformApi = (pageNo,pageSize,status) =>{
+    return request.get('/platform/getAll',{params:{pageNo,pageSize,status}})
 }
 // 添加平台
 export const addPlatformApi = (data) =>{
@@ -57,8 +80,8 @@ export const updatePlatformApi = (data) =>{
 
 /*---------------游戏类型相关------------*/
 //获取游戏类型
-export const getGameTypeApi = (pageNo,pageSize) =>{
-    return request.get('/gameType/getAll',{params:{pageNo,pageSize}})
+export const getGameTypeApi = (pageNo,pageSize,status) =>{
+    return request.get('/gameType/getAll',{params:{pageNo,pageSize,status}})
 }
 //添加游戏类型
 export const addGameTypeApi = (data) =>{
@@ -88,8 +111,8 @@ export const deleteGameApi = (id) =>{
     })
 }
 // 获取所有游戏
-export const getGameApi = (pageNo,pageSize) =>{
-    return request.get('/game/getAll',{params:{pageNo,pageSize}})
+export const getGameApi = (pageNo,pageSize,status) =>{
+    return request.get('/game/getAll',{params:{pageNo,pageSize,status}})
 }
 // 根据id获取游戏
 export const getGameByIdApi = (id) =>{
@@ -157,8 +180,8 @@ export const unTopArticleApi = (data) =>{
 
 /*---------------文章类型相关------------*/
 //获取文章类型
-export const getArticleTypeApi = () =>{
-    return request.get('/articleType/getAll')
+export const getArticleTypeApi = (pageNo,pageSize) =>{
+    return request.get('/articleType/getAll',{params:{pageNo,pageSize}})
 }
 //添加文章类型
 export const addArticleTypeApi = (data) =>{
@@ -219,6 +242,10 @@ export const deleteLikeApi=(data)=>{
 
 /*---------------浏览记录相关------------*/
 // 浏览
+export const saveViewApi=(data)=>{
+    return request.post('/viewRecord/save',data,{
+    })
+}
 // 获取浏览记录
 
 
@@ -233,6 +260,28 @@ export const uploadFileApi=(data)=>{
 // 下载文件
 export const downloadFileApi=(data)=>{
     return request.get('/file/download?img = '+img,{
+    })
+}
+
+
+/*---------------论坛设置相关------------*/
+//获取论坛设置
+export const getforumSettingApi = (pageNo,pageSize) =>{
+    return request.get('/forumSetting/getAll',{params:{pageNo,pageSize}})
+}
+//添加论坛设置
+export const addForumSettingApi = (data) =>{
+    return request.post('/forumSetting/add',data,{
+    })
+}
+//删除论坛设置
+export const deleteForumSettingApi = (data) =>{
+    return request.delete('/forumSetting/delete',data,{
+    })
+}
+//更新论坛设置
+export const updateForumSettingApi = (data) =>{
+    return request.put('/forumSetting/update',data,{
     })
 }
 

@@ -14,9 +14,16 @@ public class ForumSetting {
 
     private Integer integral;
 
-    private Integer cExp;
+    private Integer commentExp;
 
-    private Integer aExp;
+    private Integer articleExp;
+
+    private Integer dayExp;
+    //创建用户
+    private Integer createUser;
+
+    //更新用户
+    private Integer updateUser;
 
     //创建时间
     @TableField(fill = FieldFill.INSERT)

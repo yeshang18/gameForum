@@ -29,6 +29,7 @@
 import { ref,  getCurrentInstance, nextTick, } from "vue"
 import { useStore } from "vuex";
 import { saveCommentApi } from "@/api";
+import { async } from "@kangc/v-md-editor";
 
 const { proxy } = getCurrentInstance();
 const store = useStore();
@@ -106,6 +107,7 @@ const sendCommentHandle=async()=>{
             if(data.code==200){
                 resetForm();
                 emit("postFinish",data.data);
+                addLevelHandle();
                 proxy.Message.success("发送成功！");
             }
             else
@@ -122,6 +124,7 @@ const sendCommentHandle=async()=>{
             if(data.code==200){
                 resetForm();
                 emit("postFinish",data.data);
+                addLevelHandle();
                 proxy.Message.success("发送成功！");
             }
             else
@@ -133,6 +136,54 @@ const sendCommentHandle=async()=>{
     }
 
 }
+const addLevelHandle = async()=>{
+    await getForumSetting();
+    addLevelApi(forumSettingInfo.value.commentExp,forumSettingInfo.value.dayExp).then(res=>{
+    if(res.data.code==200){
+      return
+    }
+    else{
+      proxy.Message.error("系统繁忙");
+    }
+  })
+}
+
+const forumSettingInfo = ref({
+      integral:5,
+      commentExp:3,
+      articleExp:6,
+      dayExp:66
+});
+const getForumSetting = async()=>{
+  await getForumSetting().then(res=>{
+    const data = res.data;
+    if(data.code==200){
+      if(data.data.length!=0){
+        forumSettingInfo.value=data.data[0];
+      }
+      else{
+        forumSettingInfo.value={
+          integral:5,
+          commentExp:3,
+          articleExp:6,
+          dayExp:66
+        }
+      }
+    }
+    else{
+      proxy.Message.error("系统繁忙");
+      forumSettingInfo.value={
+        integral:5,
+        commentExp:3,
+        articleExp:6,
+        dayExp:66
+      }
+    }
+  })
+}
+
+
+
 </script>
 
 <style lang="scss">

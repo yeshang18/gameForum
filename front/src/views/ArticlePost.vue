@@ -83,7 +83,7 @@
 <script setup>
 import { ref, reactive, getCurrentInstance, nextTick } from "vue"
 const { proxy } = getCurrentInstance();
-import {getGameApi,getArticleTypeApi,saveArticleApi} from '@/api'
+import {getGameApi,getArticleTypeApi,saveArticleApi,addintegralApi, addLevelApi} from '@/api'
 import router from "@/router";
 import { useStore } from "vuex";
 
@@ -134,12 +134,75 @@ const postHandler= async()=>{
       const data = res.data;
       if(data.code = 200)
       {
+        setIAndLevel();
         router.push("/article/"+data.data.id);
       }
       else{
         proxy.Message.error(data.msg);
       }
     })
+  })
+}
+
+const setIAndLevel = async()=>{
+  await getForumSetting();
+  addintegralHandle();
+  addLevelHandle();
+}
+const addintegralHandle=()=>{
+  addintegralApi(forumSettingInfo.value.integral).then(res=>{
+    if(res.data.code==200){
+      return;
+    }
+    else{
+      proxy.Message.error("系统繁忙");
+    }
+  })
+}
+
+const addLevelHandle =()=>{
+  addLevelApi(forumSettingInfo.value.articleExp,forumSettingInfo.value.dayExp).then(res=>{
+    if(res.data.code==200){
+      return
+    }
+    else{
+      proxy.Message.error("系统繁忙");
+    }
+  })
+}
+
+
+const forumSettingInfo = ref({
+      integral:5,
+      commentExp:3,
+      articleExp:6,
+      dayExp:66
+});
+const getForumSetting = async()=>{
+  await getForumSetting().then(res=>{
+    const data = res.data;
+    if(data.code==200){
+      if(data.data.length!=0){
+        forumSettingInfo.value=data.data[0];
+      }
+      else{
+        forumSettingInfo.value={
+          integral:5,
+          ommentExp:3,
+          articleExp:6,
+          dayExp:66
+        }
+      }
+    }
+    else{
+      proxy.Message.error("系统繁忙");
+      forumSettingInfo.value={
+          integral:5,
+          ommentExp:3,
+          articleExp:6,
+          dayExp:66
+        }
+    }
   })
 }
 

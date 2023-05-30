@@ -13,7 +13,7 @@ public class TokenUtil {
     public static String tokenCreate(Integer userId){
 
         return JWT.create().withClaim("userId",userId)
-                .withExpiresAt(new Date(7*24*60*60*1000))
+                .withExpiresAt(new Date(System.currentTimeMillis()+7*24*60*60*1000))
                 .sign(Algorithm.HMAC256(SECRET));
     }
 
@@ -30,7 +30,7 @@ public class TokenUtil {
             verifier.verify(token);
             return true;
         } catch (JWTVerificationException e) {
-            throw new RuntimeException("token 无效，请重新获取");
+            return false;
         }
     }
 }

@@ -69,7 +69,9 @@ public class ArticleController {
         String token =request.getHeader("Authorization").split(" ")[1];
         Integer userId = null;
         if(!token.equals("null")){
-            userId = TokenUtil.getUserId(token);
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+            }
         }
         List<ArticleDto> list = articleService.getByUser(byUserId,offset,pageSize,userId);
         LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -97,7 +99,9 @@ public class ArticleController {
         String token =request.getHeader("Authorization").split(" ")[1];
         Integer userId = null;
         if(!token.equals("null")){
-            userId = TokenUtil.getUserId(token);
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+            }
         }
         List<ArticleDto> list = articleService.getByGame(gameId,offset,pageSize,userId,articleTypeId);
         LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -119,7 +123,9 @@ public class ArticleController {
         String token =request.getHeader("Authorization").split(" ")[1];
         Integer userId = null;
         if(!token.equals("null")){
-            userId = TokenUtil.getUserId(token);
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+            }
         }
         ArticleDto articleDto = articleService.getArticleById(articleId,userId);
         if(articleDto == null){
@@ -140,7 +146,9 @@ public class ArticleController {
         String token =request.getHeader("Authorization").split(" ")[1];
         Integer userId = null;
         if(!token.equals("null")){
-            userId = TokenUtil.getUserId(token);
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+            }
         }
         List<ArticleDto> list = articleService.getByTitle(title,offset,pageSize,userId);
         LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<>();

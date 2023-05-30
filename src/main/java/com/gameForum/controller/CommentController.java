@@ -51,8 +51,13 @@ public class CommentController {
         String token =request.getHeader("Authorization").split(" ")[1];
         Integer userId = null;
         if(!token.equals("null")){
-            userId = TokenUtil.getUserId(token);
-            comment.setUserId(userId);
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+                comment.setUserId(userId);
+            }
+           else{
+                return R.loginError("请登录!");
+            }
         }
         else{
             return R.loginError("请登录!");
@@ -162,7 +167,9 @@ public class CommentController {
         String token =request.getHeader("Authorization").split(" ")[1];
         Integer userId = null;
         if(!token.equals("null")){
-            userId = TokenUtil.getUserId(token);
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+            }
         }
         List<CommentDto> list = new ArrayList<>();
         //获取所有评论

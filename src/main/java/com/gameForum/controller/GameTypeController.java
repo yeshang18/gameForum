@@ -1,16 +1,20 @@
 package com.gameForum.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gameForum.common.R;
+import com.gameForum.entity.Game;
 import com.gameForum.entity.GameType;
 import com.gameForum.entity.Platform;
 import com.gameForum.service.GameTypeService;
+import com.gameForum.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -33,21 +37,53 @@ public class GameTypeController {
     public R<Page<GameType>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
                                     @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize,
                                     @RequestParam(value="status",required = false,defaultValue = "1") Integer status){
+        LambdaQueryWrapper<GameType> lambdaQueryWrapper =new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(GameType::getStatus,status);
         Page<GameType> pageInfo = new Page<>(pageNo,pageSize);
-        gameTypeService.page(pageInfo);
+        gameTypeService.page(pageInfo,lambdaQueryWrapper);
         return R.success(pageInfo);
     }
 
     @PostMapping("/add")
     @ApiOperation("添加游戏类型")
-    public R<String> add(@RequestBody GameType gameType){
+    public R<String> add(@RequestBody GameType gameType, HttpServletRequest request){
+        String token =request.getHeader("Authorization").split(" ")[1];
+        Integer userId = null;
+        if(!token.equals("null")){
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+                gameType.setCreateUser(userId);
+                gameType.setUpdateUser(userId);
+            }
+            else{
+                return R.loginError("请登录!");
+            }
+        }
+        else{
+            return R.loginError("请登录!");
+        }
+
         gameTypeService.save(gameType);
         return R.success("添加成功！");
     }
 
     @PutMapping("/update")
     @ApiOperation("更新游戏类型信息")
-    public R<String> update(@RequestBody GameType gameType) {
+    public R<String> update(@RequestBody GameType gameType,HttpServletRequest request) {
+        String token =request.getHeader("Authorization").split(" ")[1];
+        Integer userId = null;
+        if(!token.equals("null")){
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+                gameType.setUpdateUser(userId);
+            }
+            else{
+                return R.loginError("请登录!");
+            }
+        }
+        else{
+            return R.loginError("请登录!");
+        }
         gameTypeService.updateById(gameType);
         return R.success(("更新成功!"));
     }

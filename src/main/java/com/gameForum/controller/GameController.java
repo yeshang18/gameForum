@@ -7,11 +7,13 @@ import com.gameForum.common.R;
 import com.gameForum.entity.Game;
 import com.gameForum.entity.PageInfo;
 import com.gameForum.service.GameService;
+import com.gameForum.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ClientInfoStatus;
 import java.util.List;
 
@@ -34,7 +36,23 @@ public class GameController {
 
     @ApiOperation("添加游戏")
     @PostMapping("/add")
-    public R<String> add(@RequestBody Game game){
+    public R<String> add(@RequestBody Game game, HttpServletRequest request){
+        String token =request.getHeader("Authorization").split(" ")[1];
+        Integer userId = null;
+        if(!token.equals("null")){
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+                game.setCreateUser(userId);
+                game.setUpdateUser(userId);
+            }
+            else{
+                return R.loginError("请登录!");
+            }
+        }
+        else{
+            return R.loginError("请登录!");
+        }
+
         gameService.save(game);
         return R.success("添加成功！");
     }
@@ -102,7 +120,21 @@ public class GameController {
 
     @PutMapping("/update")
     @ApiOperation("更新游戏信息")
-    public R<String> update(@RequestBody Game game){
+    public R<String> update(@RequestBody Game game,HttpServletRequest request){
+        String token =request.getHeader("Authorization").split(" ")[1];
+        Integer userId = null;
+        if(!token.equals("null")){
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+                game.setUpdateUser(userId);
+            }
+            else{
+                return R.loginError("请登录!");
+            }
+        }
+        else{
+            return R.loginError("请登录!");
+        }
         gameService.updateById(game);
         return R.success("更新成功!");
     }

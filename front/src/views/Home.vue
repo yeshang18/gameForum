@@ -18,7 +18,7 @@
                 <div class="menu">
                     <a class="menu" href="#">首页</a>
                     <a class="menu" href="#">论坛</a>
-                    <a class="menu" href="#">反馈</a>
+                    <a class="menu" href="#"><RouterLink to="/feedback">反馈</RouterLink></a>
                     <a class="menu" href="#" v-if="userInfo.power == 1"><RouterLink to="/end">管理</RouterLink></a>
                 </div>
             </div>
@@ -105,6 +105,7 @@ onMounted(()=>{
 const getUserInfo =()=>{
     if(proxy.VueCookies.isKey("loginInfo")){
         let id = proxy.VueCookies.get("loginInfo").id;
+        
         getUserByIdApi(id).then(res=>{
             const data= res.data;
             if(data.code == 200){
