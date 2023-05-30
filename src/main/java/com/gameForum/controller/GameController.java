@@ -48,9 +48,12 @@ public class GameController {
     @GetMapping("/getAll")
     @ApiOperation("获取所有游戏")
     public R<Page<Game>> getALl(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
-                                @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
+                                @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize,
+                                @RequestParam(value="status",required = false,defaultValue = "1") Integer status){
+        LambdaQueryWrapper<Game> lambdaQueryWrapper =new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Game::getStatus,status);
         Page<Game> pageInfo = new Page<>(pageNo,pageSize);
-        gameService.page(pageInfo);
+        gameService.page(pageInfo,lambdaQueryWrapper);
         return R.success(pageInfo);
     }
 
@@ -67,6 +70,7 @@ public class GameController {
                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
         LambdaQueryWrapper<Game> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Game::getType,typeId);
+        lambdaQueryWrapper.eq(Game::getStatus,1);
         Page<Game> pageInfo = new Page<>(pageNo,pageSize);
         gameService.page(pageInfo,lambdaQueryWrapper);
         return R.success(pageInfo);
@@ -78,6 +82,7 @@ public class GameController {
                                        @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
         LambdaQueryWrapper<Game> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Game::getPlatform,platformId);
+        lambdaQueryWrapper.eq(Game::getStatus,1);
         Page<Game> pageInfo = new Page<>(pageNo,pageSize);
         gameService.page(pageInfo,lambdaQueryWrapper);
         return R.success(pageInfo);
@@ -89,6 +94,7 @@ public class GameController {
                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Game> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.like(Game::getName,name);
+        lambdaQueryWrapper.eq(Game::getStatus,1);
         Page<Game> pageInfo = new Page<>(pageNo,pageSize);
         gameService.page(pageInfo,lambdaQueryWrapper);
         return R.success(pageInfo);

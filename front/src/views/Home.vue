@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="option">
-                <el-button type="primary">发帖</el-button>
+                <el-button type="primary" @click="newPost()">发帖</el-button>
             </div>
 
             <!-- <div class="user-info">
@@ -47,16 +47,16 @@
             </div> -->
             <div class="user-info" v-if="userInfo.id">
                 <el-dropdown>
-                    <avatar></avatar>
+                    <avatar :userId="userInfo.id" style="{outline: none;}"></avatar>
                     <template #dropdown>
-                        <div class="user-details">
-                        <div><b>{{userInfo.name}}</b></div>
-                        <div>uid:{{userInfo.id}}</div>
-                        <div>{{ levelset(userInfo.level) }}</div>
-                        <div>积分:{{userInfo.integral}}</div>
+                        <div class="user-details" :style="{textAlign:'center'}">
+                            <div class="user-name" :style="{'font-size':'14px','font-weight':'bold'}">{{userInfo.name}}</div>
+                            <div class="user-id" :style="{'font-size':'12px','font-weight':'bold'}">uid:{{userInfo.id}}</div>
+                            <div :style="{color:proxy.Util.level(userInfo.level).color,'font-size':'13px','font-weight':'bold'}" class="user-level">{{ proxy.Util.level(userInfo.level).info }}</div>
+                            <div class="user-integral" :style="{'font-size':'12px','font-weight':'bold'}">积分:{{userInfo.integral}}</div>
                         </div>
                     <el-dropdown-menu>
-                        <el-dropdown-item>个人中心</el-dropdown-item>
+                        <el-dropdown-item><RouterLink :to="'/user/'+userInfo.id">个人中心</RouterLink></el-dropdown-item>
                         <el-dropdown-item>帖子管理</el-dropdown-item>
                         <el-dropdown-item divided @click="loginOut()">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
@@ -84,6 +84,7 @@ import LoginAndRegister from './LoginAndRegister.vue';
 import { ref,onMounted,watch,getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import { getUserByIdApi,getGameByTypeApi,getGameApi,getPlatformApi,getGameTypeApi } from "@/api";
+import router from '@/router';
 
 const {proxy} = getCurrentInstance();
 const store =useStore();
@@ -92,6 +93,8 @@ const loginRegisterRef =ref();
 const loginAndRegister = (type)=>{
     loginRegisterRef.value.showPanel(type);
 }
+
+
 
 onMounted(()=>{
     // initScroll();
@@ -117,33 +120,12 @@ const getUserInfo =()=>{
     }
 }
 
-const level = ref()
-
-//等级
-const levelset =(level) =>{
-        if(level<99){
-            return "lv1 "+level+"/99";
-        }
-        else if(level>=99&&level<299){
-            return "lv2 "+level+"/299";
-        }
-        else if(level>=299&&level<599){
-            return "lv3 "+level+"/599";
-        }
-        else if(level>=599&&level<999){
-            return "lv4 "+level+"/999";
-        }
-        else if(level>=999){
-            return "lv5 "+level+"/max";
-        }
-}
-
-
-
 //退出登陆
 const loginOut =() =>{
     proxy.VueCookies.remove("loginInfo");
+    localStorage.removeItem("token");
     store.commit("updateLoginUserInfo",null);
+    location.reload();
 }
 
 const userInfo =ref({})
@@ -168,76 +150,80 @@ watch(() => store.state.showLogin,
 }, 
 { immediate: true, deep: true }
 );
-
-
+//发帖页面
+const newPost = ()=>{
+    if(!store.getters.getLoginUserInfo){
+        store.commit("showLogin",true);
+        return;
+    }
+    else{
+        router.push("/newArticle")
+    }
+}
 
 </script>
 
 <style scoped lang="scss">
-    .top{
-        top: 0%;
-        margin: 0 0;
-        padding:0 0;
-        width: 100%;
-        height: 60px;
-        opacity: 1;
-        z-index: 999;
-        background-color: white;
-        position: fixed;
+.top{
+    top: 0%;
+    margin: 0 0;
+    padding:0 0;
+    width: 100%;
+    height: 60px;
+    opacity: 1;
+    z-index: 999;
+    background-color: white;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 6px 0 #ddd;
+    .top-text{
+        width: 70%;
         display: flex;
         align-items: center;
-        box-shadow: 0 2px 6px 0 #ddd;
-        .top-text{
-            width: 70%;
+        .menu{
             display: flex;
-            align-items: center;
-            .menu{
-                display: flex;
-                margin: 10px;
-            }
+            margin: 10px;
+        }
 
-        }
-        .option{
-            padding-right: 10px;
-            width: 10%;
-            text-align: right;
-        }
-        .userButton{
-            width: 10%;        
-            //align-items: center;
-            display:flex;
-            // text-align: center;
-            .button-text{
-                margin: auto;
-                align-items: center;
-            }
-        }
-        .logo{
+    }
+    .option{
+        padding-right: 10px;
+        width: 10%;
+        text-align: right;
+    }
+    .userButton{
+        width: 10%;        
+        //align-items: center;
+        display:flex;
+        // text-align: center;
+        .button-text{
             display: flex;
-            width: 10%;
-            // align-items: center;
-            // text-align: center;
-            .logo-text{
-                margin:auto auto;
-                align-items: center;
-            }
-        }
-        .user-info{
-            cursor: pointer;
-            color: var(--el-color-primary);
-            display: flex;
+            margin: auto;
             align-items: center;
-            .user-details{
-                display: flex;
-                margin:auto auto;
-                align-items: center;
-                font-size: 5px;
-            }
         }
-        
     }
-    .body-content{
-        margin-top: 60px;
+    .logo{
+        display: flex;
+        width: 10%;
+        // align-items: center;
+        // text-align: center;
+        .logo-text{
+            margin:auto auto;
+            align-items: center;
+        }
     }
+    .user-info{
+        cursor: pointer;
+        color: var(--el-color-primary);
+        display: flex;
+        align-items: center;
+        outline: none;
+    }
+    
+}
+.body-content{
+    margin-top: 60px;
+}
 
 </style>

@@ -26,6 +26,8 @@ public class GameType implements Serializable {
 
     //类型名称
     private String typeName;
+    //1审核通过 0未通过
+    private Integer status;
 
     //创建用户
     private Integer createUser;

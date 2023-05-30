@@ -13,9 +13,16 @@
     max:1,
   })
 
+
+
 </script>
 
 <style>
+body{
+  background-image: url(./assets/bg/bg5.jpg);
+  background-position: 50% 50%;
+  background-attachment: fixed;
+}
 * {
   margin: 0;
   padding: 0;

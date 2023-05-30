@@ -3,13 +3,17 @@ package com.gameForum.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gameForum.common.R;
+import com.gameForum.entity.Article;
 import com.gameForum.entity.ViewRecord;
+import com.gameForum.service.ArticleService;
 import com.gameForum.service.ViewRecordService;
+import com.gameForum.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -27,10 +31,24 @@ public class ViewRecordController {
 
     @Autowired
     private ViewRecordService viewRecordService;
+    @Autowired
+    private ArticleService articleService;
 
     @PostMapping("/save")
     @ApiOperation("保存记录")
-    public R<String> saveRecord(@RequestBody ViewRecord viewRecord){
+    public R<String> saveRecord(@RequestBody ViewRecord viewRecord, HttpServletRequest request){
+        String token =request.getHeader("Authorization").split(" ")[1];
+        Integer userId = null;
+        if(!token.equals("null")){
+            userId = TokenUtil.getUserId(token);
+            viewRecord.setUserId(userId);
+        }
+        else{
+            return R.success("未登录，不予记录");
+        }
+        Article article = articleService.getById(viewRecord);
+        article.setView(article.getView()+1);
+        articleService.updateById(article);
         viewRecordService.save(viewRecord);
         return R.success("保存成功！");
     }

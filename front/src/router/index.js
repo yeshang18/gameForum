@@ -6,13 +6,26 @@ const routes = [
     path:'/',
     component:Home,
     children:[{
-      path:"/end",
-      component:()=>import('../views/End.vue')
-    },
-    {
-      path:"/",
-      component:()=>import('../views/ArticleList.vue')
-    }]
+        path:"/end",
+        component:()=>import('../views/End.vue')
+      },
+      {
+        path:"/",
+        component:()=>import('../views/ArticleList.vue')
+      },
+      {
+        path:"/article/:articleId",
+        component:()=>import('../views/ArticleDetail.vue')
+      },
+      {
+        path:"/newArticle",
+        component:()=>import('../views/ArticlePost.vue')
+      },
+      {
+        path:"/user/:userId",
+        component:()=>import('../views/Ucenter.vue')
+      },
+    ]
   },
 ]
 

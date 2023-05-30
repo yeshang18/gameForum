@@ -29,6 +29,8 @@ public class Platform implements Serializable {
      */
     private String platformName;
 
+    //1审核通过 0未通过
+    private Integer status;
     //创建用户
     private Integer createUser;
 

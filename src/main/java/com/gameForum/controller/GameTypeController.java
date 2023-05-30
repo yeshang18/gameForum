@@ -31,7 +31,8 @@ public class GameTypeController {
     @GetMapping("/getAll")
     @ApiOperation("获取所有游戏类型")
     public R<Page<GameType>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
-                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
+                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize,
+                                    @RequestParam(value="status",required = false,defaultValue = "1") Integer status){
         Page<GameType> pageInfo = new Page<>(pageNo,pageSize);
         gameTypeService.page(pageInfo);
         return R.success(pageInfo);

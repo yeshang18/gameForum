@@ -17,7 +17,9 @@ import java.util.List;
 public interface ArticleService extends IService<Article> {
     List<ArticleDto> getByTitle(String title,Integer pageNo,Integer pageSize,Integer userId);
 
-    List<ArticleDto> getByGame(Integer gameId,Integer pageNo,Integer pageSize,Integer userId);
+    List<ArticleDto> getByGame(Integer gameId,Integer pageNo,Integer pageSize,Integer userId,Integer articleTypeId);
 
     ArticleDto getArticleById(Integer id,Integer userId);
+
+    List<ArticleDto> getByUser(Integer byUserId,Integer pageNo,Integer pageSize,Integer userId);
 }

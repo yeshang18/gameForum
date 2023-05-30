@@ -5,11 +5,13 @@ import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gameForum.common.R;
 import com.gameForum.entity.User;
+import com.gameForum.entity.UserDto;
 import com.gameForum.service.UserService;
 import com.gameForum.utils.IsPhone;
 import com.gameForum.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +42,15 @@ public class UserController {
      */
     @GetMapping("/{id}")
     @ApiOperation("根据id查询用户")
-    public R<User> getById(@PathVariable long id){
+    public R<UserDto> getById(@PathVariable Integer id){
         User user = userService.getById(id);
-        return R.success(user);
+        if(user==null){
+            return R.nferror("用户不存在！");
+        }
+        UserDto userDto = userService.getUserInfo(id);
+        BeanUtils.copyProperties(user,userDto);
+        userDto.setPassword(null);
+        return R.success(userDto);
     }
 
     /**

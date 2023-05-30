@@ -35,6 +35,8 @@ public class Game implements Serializable {
 
     //游戏介绍
     private String description;
+    //1审核通过 0未通过
+    private Integer status;
 
     //创建用户
     private Integer createUser;

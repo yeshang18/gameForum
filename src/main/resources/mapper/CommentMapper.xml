@@ -5,27 +5,39 @@
     </resultMap>
 
     <select id="selectCommentOrderByTime" resultType="com.gameForum.entity.CommentDto" resultMap="baseMap">
-        select comment.*,a.user_name,a.img,
+        select comment.*,a.user_name,a.img,r.reply_user_name,
                if(isnull(b.id),false,true) as flag
         from comment
                  left join (select id,name as user_name,img from user WHERE deleted = 0) a on a.id = comment.user_id
+                 left join (select id,name as reply_user_name from user WHERE deleted = 0) r on r.id = comment.reply_user_id
                  left JOIN (SELECT comment_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on comment.id = b.comment_id
-        where comment.article_id = #{articleId} and deleted =0 order by comment.create_time Limit #{pageOn},#{pageSize}
+        where comment.article_id = #{articleId} and deleted =0 order by comment.is_top Desc,comment.create_time Desc Limit #{pageNo},#{pageSize}
     </select>
     <select id="selectCommentOrderByLikes" resultType="com.gameForum.entity.CommentDto" resultMap="baseMap">
-        select comment.*,a.user_name,a.img,
+        select comment.*,a.user_name,a.img,r.reply_user_name,
                if(isnull(b.id),false,true) as flag
         from comment
                  left join (select id,name as user_name,img from user WHERE deleted = 0) a on a.id = comment.user_id
+                 left join (select id,name as reply_user_name from user WHERE deleted = 0) r on r.id = comment.reply_user_id
                  left JOIN (SELECT comment_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on comment.id = b.comment_id
-        where comment.article_id = #{articleId} and deleted =0 order by comment.create_time Limit #{pageOn},#{pageSize}
+        where comment.article_id = #{articleId} and deleted =0 order by comment.is_top Desc,comment.likes desc , comment.create_time Limit #{pageNo},#{pageSize}
     </select>
     <select id="selectChildrenComments" resultType="com.gameForum.entity.CommentDto" resultMap="baseMap">
-        select comment.*,a.user_name,a.img,
+        select comment.*,a.user_name,a.img,r.reply_user_name,
                if(isnull(b.id),false,true) as flag
         from comment
                  left join (select id,name as user_name,img from user WHERE deleted = 0) a on a.id = comment.user_id
+                 left join (select id,name as reply_user_name from user WHERE deleted = 0) r on r.id = comment.reply_user_id
                  left JOIN (SELECT comment_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on comment.id = b.comment_id
-        where comment.comment_id = #{commentId} and deleted =0 order by comment.create_time Limit #{pageOn},#{pageSize}
+        where comment.comment_id = #{commentId} and deleted =0 order by comment.likes desc,comment.create_time;
+    </select>
+    <select id="selectCommentById" resultType="com.gameForum.entity.CommentDto" resultMap="baseMap">
+        select comment.*,a.user_name,a.img,r.reply_user_name,
+               if(isnull(b.id),false,true) as flag
+        from comment
+                 left join (select id,name as user_name,img from user WHERE deleted = 0) a on a.id = comment.user_id
+                 left join (select id,name as reply_user_name from user WHERE deleted = 0) r on r.id = comment.reply_user_id
+                 left JOIN (SELECT comment_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on comment.id = b.comment_id
+        where comment.id = #{id} and deleted =0 order by comment.create_time
     </select>
 </mapper>

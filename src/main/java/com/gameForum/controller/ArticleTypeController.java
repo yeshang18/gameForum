@@ -38,7 +38,7 @@ public class ArticleTypeController {
     }
 
 
-    @GetMapping("/all")
+    @GetMapping("/getAll")
     @ApiOperation("获取全部类型")
     public R<List<ArticleType>> getAll(){
         List<ArticleType> list = articleTypeService.list();

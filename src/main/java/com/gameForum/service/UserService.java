@@ -2,6 +2,7 @@ package com.gameForum.service;
 
 import com.gameForum.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gameForum.entity.UserDto;
 
 /**
  * <p>
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-04-21
  */
 public interface UserService extends IService<User> {
-
+    UserDto getUserInfo (Integer userId);
 }

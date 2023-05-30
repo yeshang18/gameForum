@@ -30,7 +30,8 @@ public class PlatformController {
     @GetMapping("/getAll")
     @ApiOperation("获取所有平台")
     public R<Page<Platform>> getAll(@RequestParam(value="pageNo",required = false,defaultValue = "1") Integer pageNo,
-                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize){
+                                    @RequestParam(value="pageSize",required = false,defaultValue = "10") Integer pageSize,
+                                    @RequestParam(value="status",required = false,defaultValue = "1") Integer status){
         Page<Platform> pageInfo = new Page<>(pageNo,pageSize);
         platformService.page(pageInfo);
         return R.success(pageInfo);

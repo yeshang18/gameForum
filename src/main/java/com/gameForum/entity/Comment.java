@@ -38,6 +38,11 @@ public class Comment implements Serializable {
 
     //评论用户
     private Integer userId;
+    //回复用户
+    private Integer replyUserId;
+
+    //置顶
+    private Integer isTop;
 
     //创建时间
     @TableField(fill = FieldFill.INSERT)

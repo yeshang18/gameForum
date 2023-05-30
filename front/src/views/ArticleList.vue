@@ -1,50 +1,54 @@
 <template>
   <div class="forum">
-            <el-container>
-            <el-header class="header">
+        <div class="forum-body">
+            <div class="header">
                 <div class="game-category">
-                    <div class="fenlei" @click="setFlag(0)">根据游戏类型分类</div>
+                    <div class="fenlei" @click="setFlag(0)" :style="{color: gameFlag==0?'#2366ff':''}">根据游戏类型分类</div>
                     <el-divider direction="vertical"></el-divider>
-                    <div class="fenlei" @click="setFlag(1)">根据游戏平台分类</div>
+                    <div class="fenlei" @click="setFlag(1)" :style="{color: gameFlag==1?'#2366ff':''}">根据游戏平台分类</div>
                 </div>
-                <div>
-                    <el-button type="danger" round 
-                    v-for="gameCategory in gameCategorys" :key="gameCategory.id"
-                     @click="getGameByType(gameCategory.id)" v-if="gameFlag==0">
+                <div class="category-info" v-if="gameFlag==0">
+                    <div  class="category-item" :style="{background:nowCategoryId==gameCategory.id?'rgb(181, 59, 59)':''}"
+                    v-for="gameCategory in gameCategorys"
+                     @click="getGameByType(gameCategory.id)" >
                      {{ gameCategory.typeName }}
-                    </el-button>
+                    </div>
                 </div>
-                <div>
-                    <el-button type="danger" round 
-                    v-for="gameCategory in gameCategorys" :key="gameCategory.id"
-                     @click="getGameByPlatform(gameCategory.id)" v-if="gameFlag==1">
+                <div class="category-info" v-if="gameFlag==1">
+                    <div class="category-item"
+                    v-for="gameCategory in gameCategorys" :style="{background:nowCategoryId==gameCategory.id?'rgb(181, 59, 59)':''}"
+                     @click="getGameByPlatform(gameCategory.id)" >
                      {{ gameCategory.platformName }}
-                    </el-button>
                 </div>
-                
-            </el-header>
-            <el-container>
-                <el-aside width="160px" class="aside">
-                    <ul>
-                        <li class="game-detail" v-for="game in games" :key="game.id"
-                        @click="clickGame(game.id)">
-                        {{ game.name }}</li>
-                        <!-- <li class="game-detail"><el-button type="success" v-for="game in games" :key="game.id">{{ game.name }}</el-button></li> -->
-                    </ul>
-                </el-aside>
-                <el-container>
-                <el-main class="main">
+                </div>               
+            </div>
+            <div class="game-article">
+                <div width="160px" class="game-aside">
+                    <div class="game-info" v-for="game in games" :style="{background:nowGameId==game.id?'aqua':''}"
+                    @click="clickGame(game.id)">
+                    {{ game.name }}</div>
+                </div>
+                <div class="article-info">
+                    <div class="article-type">
+                        <span class="type-info" :style="{color:nowTypeId==0?'#2366ff':''}" @click="getArticleByType(0)">全部</span>
+                        <div class="type-panel" v-for="articleType in articleTypeInfo">
+                            <el-divider direction="vertical"></el-divider>
+                            <span class="type-info" :style="{color:nowTypeId==articleType.id?'#2366ff':''}" @click="getArticleByType(articleType.id)" 
+                        >{{ articleType.typeName }}</span>
+                        
+                        </div>
+                        
+                        <!-- <span class="type-info" :style="{color:nowTypeId==0?'#2366ff':''}">分享</span> -->
+                    </div>
                     <DataList :dataSource="articles" @loadData="loadArticle">
                         <template #default="{data}">
-                            <ArticleListItem :data="data"></ArticleListItem>
+                            <ArticleListItem :data="data" @deleteHandle="deleteHandle"></ArticleListItem>
                         </template>
                     </DataList>
-                </el-main>
-                <!-- <el-footer class="footer">Footer</el-footer> -->
-                </el-container>
-            </el-container>
-            </el-container>
+                </div>
+            </div>
         </div>
+    </div>
 </template>
 
 <script setup>
@@ -52,12 +56,14 @@ import ArticleListItem from './ArticleListItem.vue';
 import { ref,onMounted,watch,getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import { getUserByIdApi,getGameByTypeApi,getGameApi,getPlatformApi,
-    getGameTypeApi, getGameByPlatformApi,getArticleByGameApi } from "@/api";
+    getGameTypeApi, getGameByPlatformApi,getArticleByGameApi, getArticleTypeApi } from "@/api";
 
 onMounted(()=>{
     setFlag(0);
+    getArticleType();
 })
 const gameFlag=ref(0)
+const nowCategoryId =ref(0);
 const gameCategorys = ref([])
 
 const setFlag=(flag)=>{
@@ -76,7 +82,7 @@ const getGameType = () => {
         const data = res.data;
         if(data.code==200){
             gameCategorys.value = data.data.records;
-            if(gameCategorys.value!=null){
+            if(gameCategorys.value.length!=0){
                 getGameByType(gameCategorys.value[0].id);
             }
         }
@@ -88,23 +94,41 @@ const getPlatform = () => {
         const data = res.data;
         if(data.code==200){
             gameCategorys.value = data.data.records;
-            if(gameCategorys.value!=null){
+            if(gameCategorys.value.length!=0){
                 getGameByPlatform(gameCategorys.value[0].id);
             }
         }
     })
 }
 
+const articleTypeInfo = ref({});
+const getArticleType =()=>{
+    getArticleTypeApi().then(res=>{
+        const data = res.data;
+        if(data.code==200){
+            articleTypeInfo.value = data.data;
+        }
+    })
+}
+
+
 const games = ref([]);
 const nowGameId = ref();
 //根据类型获取游戏
 const getGameByType =(typeId)=>{
     getGameByTypeApi(typeId,1,-1).then(res=>{
+        nowCategoryId.value=typeId;
         const data = res.data;
         if(data.code == 200){
             games.value = data.data.records;
-            if(games.value!=null){
+            if(games.value.length!=0){
                 getArticleByGame(games.value[0].id)
+            }
+            else{
+                nowGameId.value = null;
+                articles.value={
+                    records:[]
+                };
             }
         }
     })
@@ -113,6 +137,7 @@ const getGameByType =(typeId)=>{
 //根据游戏平台获取游戏
 const getGameByPlatform =(typeId)=>{
     getGameByPlatformApi(typeId,1,-1).then(res=>{
+        nowCategoryId.value=typeId;
         const data = res.data;
         if(data.code == 200){
             games.value = data.data.records;
@@ -122,6 +147,14 @@ const getGameByPlatform =(typeId)=>{
         }
     })
 }
+const deleteHandle =()=>{
+    loadArticle(nowPageNo,nowPageSize)
+}
+
+const nowPageNo =ref();
+const nowPageSize =ref();
+//0为全部
+const nowTypeId = ref(0)
 
 const articles= ref([])
 //根据游戏获取文章
@@ -131,14 +164,32 @@ const getArticleByGame = (gameId) =>{
         nowGameId.value = gameId;
         if(data.code==200){
             articles.value=data.data;
+            nowPageNo.value==1;
+            nowPageSize.value==10;
         }
     })
 }
-const loadArticle = (pageNo,pageSize)=>{
-    getArticleByGameApi(nowGameId.value,pageNo,pageSize).then(res=>{
+//根据类型
+const getArticleByType = (typeId)=>{
+    getArticleByGameApi(nowGameId.value,1,10,typeId).then(res=>{
+        nowTypeId.value=typeId;
         const data = res.data;
         if(data.code==200){
             articles.value=data.data;
+            nowPageNo.value==1;
+            nowPageSize.value==10;
+        }
+    })
+}
+
+
+const loadArticle = (pageNo,pageSize)=>{
+    getArticleByGameApi(nowGameId.value,pageNo,pageSize,nowTypeId.value).then(res=>{
+        const data = res.data;
+        if(data.code==200){
+            articles.value=data.data;
+            nowPageNo.value==pageNo;
+            nowPageSize.value==pageSize;
         }
     })
 }
@@ -151,13 +202,20 @@ const clickGame=(gameId) =>{
 
 <style lang="scss" scoped>
 .forum{
+    width: 1300px;
+    margin: 0 auto;
+    margin-top: 70px;
+    .forum-body{          
         .header{
+            margin-top: 30px;
             padding: 10px;
-            height: 100px;
+            border-radius: 5px;
             .game-category{
                 height: 30px;
+                
+                border-bottom: 1px solid #ddd;
                 display: flex;
-                .fenlei{
+                .fenlei{                   
                     cursor: pointer;
                     
                 }
@@ -165,24 +223,64 @@ const clickGame=(gameId) =>{
                     color: #2366ff;
                 }
             }
+            .category-info{
+                margin-top: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                .category-item{
+                    background-color: #ddd;
+                    margin-right: 5px;
+                    text-align: center;
+                    font-size: 18px;
+                    font-weight: 700;                   
+                    width: 125px;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+            }
 
         }
-        .aside{
-            height: calc(100vh - 160px);
-            .game-detail{
-                display: block;
-                align-items: center;
-                justify-content: center;
-                height: 50px;
-                margin: 10px;
-                cursor: pointer;
+        .game-article{        
+            margin-top: 10px;
+            display: flex;
+            .game-aside{
+                height: auto;
+                border-radius: 5px;
+                width: 150px;
+                max-height: calc(100vh - 160px);
+                .game-info{
+                    background: #fff;
+                    margin-top: 3px;
+                    padding: 10px;
+                    display: block;
+                    text-align: center;
+                    cursor: pointer;
+                    border-bottom: 1px solid #ddd;
+                    border-radius: 5px;
+
+                 }
             }
-            .game-detail:hover{
-                color: #2366ff;
+            .article-info{
+                opacity: 0.95;
+                border-radius: 5px;
+                margin-left: 10px;
+                background: #fff;
+                flex:1;
+                .article-type{
+                    display: flex;
+                    margin-top: 10px;
+                    margin-left: 8px;
+                    .type-info{
+                        padding: 0px 2px;
+                        cursor: pointer;
+                    }
+                    .type-info:hover{
+                        color: #2366ff;
+                    }
+                }
             }
         }
     }
-    .main{
-    }
-
+}             
 </style>

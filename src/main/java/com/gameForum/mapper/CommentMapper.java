@@ -21,5 +21,7 @@ public interface CommentMapper extends BaseMapper<Comment> {
 
     List<CommentDto> selectCommentOrderByLikes(Integer articleId,Integer pageNo,Integer pageSize,Integer userId);
 
-    List<CommentDto> selectChildrenComments(Integer articleId,Integer pageNo,Integer pageSize,Integer userId);
+    List<CommentDto> selectChildrenComments(Integer commentId,Integer userId);
+
+    CommentDto selectCommentById(Integer id,Integer userId);
 }

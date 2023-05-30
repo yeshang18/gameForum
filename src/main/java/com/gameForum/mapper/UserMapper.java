@@ -2,6 +2,7 @@ package com.gameForum.mapper;
 
 import com.gameForum.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gameForum.entity.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -14,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-
+    UserDto selectUserInfo(Integer userId);
 }

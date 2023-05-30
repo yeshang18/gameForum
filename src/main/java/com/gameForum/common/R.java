@@ -36,10 +36,19 @@ public class R<T> implements Serializable {
         r.code = 410;
         return r;
     }
+    //未发现
     public static <T> R<T> nferror(String msg) {
         R r = new R();
         r.msg = msg;
         r.code = 404;
+        //r.success = "false";
+        return r;
+    }
+    //未登录
+    public static <T> R<T> loginError(String msg) {
+        R r = new R();
+        r.msg = msg;
+        r.code = 901;
         //r.success = "false";
         return r;
     }

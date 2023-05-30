@@ -6,7 +6,7 @@
         :buttons="dialogConfig.buttons"
         width="400px"
         :showCancel="false"
-        @close="dialogConfig.show = false">
+        @close="closeDialog()">
             <div class="login-register"> 
             <el-form
               :model="formData"
@@ -78,6 +78,13 @@ const dialogConfig = reactive({
   title: "",
 });
 
+const closeDialog=()=>{
+  dialogConfig.show=false;
+  store.commit("showLogin",false)
+}
+
+
+
 const checkUpassword = (rule,value,callback)=>{
   if(value!==formData.value.password){
    // console.log("222");
@@ -124,7 +131,6 @@ const resetForm = ()=>{
   nextTick(()=>{
     formDataRef.value.resetFields();
     formData.value={
-
     }
   })
 }
@@ -190,6 +196,7 @@ const login = (formData) =>{
                       }
                       proxy.VueCookies.set("loginInfo",loginInfo,"7d");
                       store.commit("updateLoginUserInfo",data.data);
+                      location.reload();
                     }
                     else{
                       proxy.Message.error(data.msg);

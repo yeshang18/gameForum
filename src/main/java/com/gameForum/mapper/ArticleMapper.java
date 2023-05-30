@@ -21,7 +21,9 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     List<ArticleDto> selectArticleByTitle(String title, Integer pageNo,Integer pageSize,Integer userId);
 
-    List<ArticleDto> selectArticleByGame(Integer gameId,Integer pageNo,Integer pageSize,Integer userId);
+    List<ArticleDto> selectArticleByGame(Integer gameId,Integer pageNo,Integer pageSize,Integer userId,Integer articleTypeId);
 
     ArticleDto selectArticleById(Integer id,Integer userId);
+
+    List<ArticleDto> selectArticleByUser(Integer byUserId, Integer pageNo,Integer pageSize,Integer userId);
 }

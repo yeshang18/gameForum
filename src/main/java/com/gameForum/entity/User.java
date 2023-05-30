@@ -34,6 +34,12 @@ public class User implements Serializable {
      */
     private String password;
 
+
+    private Integer sex;
+
+
+    private String description;
+
     /**
      * 头像
      */

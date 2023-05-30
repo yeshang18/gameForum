@@ -7,15 +7,13 @@ import java.util.List;
 @Data
 public class CommentDto extends Comment{
     //是否点赞
-    private boolean flag = false;
+    private Boolean flag;
 
-    private List<CommentDto> list;
+    private List<CommentDto> children;
 
     private String userName;
 
     private String img;
-
-    private String replyContent;
 
     private String replyUserName;
 }

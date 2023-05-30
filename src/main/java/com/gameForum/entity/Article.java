@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.context.annotation.ComponentScan;
 
 /**
  * <p>
@@ -31,6 +30,10 @@ public class Article implements Serializable {
     private Integer gameId;
 
     private Integer articleTypeId;
+
+    private String cover;
+
+    private String description;
     //是否置顶
     private Integer isTop;
     //帖子内容

@@ -24,7 +24,12 @@ module.exports = defineConfig({
   },
   devServer:{
     port:8081,
-    open:true
+    open:true,
+    client:{
+      overlay: {
+        runtimeErrors: false,
+      },
+    },
   }
 })
 

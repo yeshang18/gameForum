@@ -29,12 +29,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<ArticleDto> getByGame(Integer gameId,Integer pageNo,Integer pageSize,Integer userId) {
-        return articleMapper.selectArticleByGame(gameId,pageNo,pageSize,userId);
+    public List<ArticleDto> getByGame(Integer gameId,Integer pageNo,Integer pageSize,Integer userId,Integer articleTypeId) {
+        return articleMapper.selectArticleByGame(gameId,pageNo,pageSize,userId,articleTypeId);
     }
 
     @Override
     public ArticleDto getArticleById(Integer id,Integer userId) {
         return articleMapper.selectArticleById(id,userId);
+    }
+
+    @Override
+    public List<ArticleDto> getByUser(Integer byUserId, Integer pageNo, Integer pageSize, Integer userId) {
+        return articleMapper.selectArticleByUser(byUserId, pageNo, pageSize, userId);
     }
 }

@@ -26,34 +26,32 @@
               <el-icon><message /></el-icon>用户反馈
             </template>
             <el-menu-item-group>
-              <template #title>Group 1</template>
-              <el-menu-item index="2-1">Option 1</el-menu-item>
-              <el-menu-item index="2-2">Option 2</el-menu-item>
+              <template #title>平台反馈</template>
+              <el-menu-item index="2-1">添加平台</el-menu-item>
+              <el-menu-item index="2-2">修改平台</el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group title="Group 2">
-              <el-menu-item index="2-3">Option 3</el-menu-item>
+            <el-menu-item-group>
+              <template #title>类型反馈</template>
+              <el-menu-item index="2-3">添加类型</el-menu-item>
+              <el-menu-item index="2-4">修改类型</el-menu-item>
             </el-menu-item-group>
-            <el-sub-menu index="2-4">
-              <template #title>Option 4</template>
-              <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-            </el-sub-menu>
+            <el-menu-item-group>
+              <template #title>游戏反馈</template>
+              <el-menu-item index="2-5">添加游戏</el-menu-item>
+              <el-menu-item index="2-6">修改游戏</el-menu-item>
+            </el-menu-item-group>
           </el-sub-menu>
           <el-sub-menu index="3">
             <template #title>
               <el-icon><setting /></el-icon>论坛设置
             </template>
             <el-menu-item-group>
-              <template #title>Group 1</template>
-              <el-menu-item index="3-1">Option 1</el-menu-item>
-              <el-menu-item index="3-2">Option 2</el-menu-item>
+              <template #title>文章类型</template>
+              <el-menu-item index="3-1">类型详情</el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group title="Group 2">
-              <el-menu-item index="3-3">Option 3</el-menu-item>
+            <el-menu-item-group title="发帖收益">
+              <el-menu-item index="3-2">积分经验</el-menu-item>
             </el-menu-item-group>
-            <el-sub-menu index="3-4">
-              <template #title>Option 4</template>
-              <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
-            </el-sub-menu>
           </el-sub-menu>
         </el-menu>
       </el-scrollbar>
@@ -150,7 +148,6 @@ const tableInfo = ref({});
 const getTableInfo=(type)=>{
     if(type==1){
         getPlatformInfo(1);
-        console.log(1);
         // tableInfo = platformInfo;
     }
     else if(type==2){
@@ -165,7 +162,6 @@ const getTableInfo=(type)=>{
 //获取平台信息
 const getPlatformInfo =(pageNo,pageSize) =>{
     getPlatformApi(pageNo,pageSize).then(res=>{
-      console.log(2);
         const data = res.data;
         if(data.code==200){
           // store.commit("updatePlatformInfo",data.data)

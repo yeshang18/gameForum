@@ -34,7 +34,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public List<CommentDto> getChildrenComments(Integer articleId, Integer pageNo, Integer pageSize, Integer userId) {
-        return commentMapper.selectChildrenComments(articleId, pageNo, pageSize, userId);
+    public List<CommentDto> getChildrenComments(Integer commentId, Integer userId) {
+        return commentMapper.selectChildrenComments(commentId, userId);
+    }
+
+    @Override
+    public CommentDto getCommentById(Integer id, Integer userId) {
+        return commentMapper.selectCommentById(id,userId);
     }
 }

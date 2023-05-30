@@ -1,5 +1,7 @@
+import store from "@/store";
 import axios from "axios";
 import { Promise } from "core-js";
+
 
 // import { ElLoading,configProviderContextKey } from "element-plus";
 
@@ -25,6 +27,12 @@ request.interceptors.request.use(config => {
   request.interceptors.response.use(response => {
     const {authorization} = response.headers
     authorization && localStorage.setItem("token",authorization);
+    const data = response.data;
+    if(data.code ==901){
+      store.commit("showLogin",true);
+      store.commit("updateLoginUserInfo",null);
+      return Promise.reject(alert("请登陆!"))
+    }
     return response;
   }, error => {
     return Promise.reject(error);

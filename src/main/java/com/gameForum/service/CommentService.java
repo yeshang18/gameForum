@@ -19,5 +19,7 @@ public interface CommentService extends IService<Comment> {
 
     List<CommentDto> getCommentOrderByLikes(Integer articleId,Integer pageNo,Integer pageSize,Integer userId);
 
-    List<CommentDto> getChildrenComments(Integer articleId,Integer pageNo,Integer pageSize,Integer userId);
+    List<CommentDto> getChildrenComments(Integer commentId,Integer userId);
+
+    CommentDto getCommentById(Integer id,Integer userId);
 }
