@@ -213,6 +213,8 @@ public class UserController {
             return R.success("未登录，不予记录");
         }
         User user = userService.getById(userId);
+        if(user==null)
+            return R.error("用户异常");
         user.setIntegral(user.getIntegral()+num);
         userService.updateById(user);
         return R.success("操作成功!");
@@ -238,6 +240,8 @@ public class UserController {
         }
         User user = userService.getById(userId);
 
+        if(user==null)
+            return R.error("用户异常");
         if(user.getIntegral()-num<0){
             return R.error("操作异常!");
         }
@@ -248,7 +252,7 @@ public class UserController {
 
     @PutMapping("/level")
     @ApiOperation("经验增加")
-    public R<String> addLevel(HttpServletRequest request,Integer num,@RequestParam(value = "dayExp",required = false,defaultValue = "66")Integer dayExp ){
+    public R<String> addLevel(Integer num,Integer dayExp, HttpServletRequest request){
         String token =request.getHeader("Authorization").split(" ")[1];
         Integer userId = null;
         if(!token.equals("null")){
@@ -263,6 +267,8 @@ public class UserController {
             return R.success("未登录，不予记录");
         }
         User user = userService.getById(userId);
+        if(user==null)
+            return R.error("用户异常");
         if(Objects.equals(user.getDayLevel(), dayExp)){
             return R.success("已达经验上限！");
         }
@@ -270,6 +276,7 @@ public class UserController {
             num = dayExp-user.getDayLevel();
         }
         user.setLevel(user.getLevel()+num);
+        user.setDayLevel(user.getDayLevel()+num);
         userService.updateById(user);
         return R.success("操作成功！");
     }

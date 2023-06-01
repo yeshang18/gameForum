@@ -83,7 +83,7 @@
 <script setup>
 import { ref, reactive, getCurrentInstance, nextTick } from "vue"
 const { proxy } = getCurrentInstance();
-import {getGameApi,getArticleTypeApi,saveArticleApi,addintegralApi, addLevelApi} from '@/api'
+import {getGameApi,getArticleTypeApi,saveArticleApi,addintegralApi, addLevelApi, getforumSettingApi} from '@/api'
 import router from "@/router";
 import { useStore } from "vuex";
 
@@ -161,7 +161,10 @@ const addintegralHandle=()=>{
 }
 
 const addLevelHandle =()=>{
-  addLevelApi(forumSettingInfo.value.articleExp,forumSettingInfo.value.dayExp).then(res=>{
+  const dataF =new FormData();
+  dataF.append("num",forumSettingInfo.value.articleExp);
+  dataF.append("dayExp",forumSettingInfo.value.dayExp);
+  addLevelApi(dataF).then(res=>{
     if(res.data.code==200){
       return
     }
@@ -179,11 +182,11 @@ const forumSettingInfo = ref({
       dayExp:66
 });
 const getForumSetting = async()=>{
-  await getForumSetting().then(res=>{
+  await getforumSettingApi().then(res=>{
     const data = res.data;
     if(data.code==200){
       if(data.data.length!=0){
-        forumSettingInfo.value=data.data[0];
+        forumSettingInfo.value=data.data.records[0];
       }
       else{
         forumSettingInfo.value={
@@ -212,7 +215,7 @@ const gameInfo = ref([])
 const articleTypeInfo = ref([])
 //获取游戏信息
 const getGameInfo =() =>{
-    getGameApi(0,-1).then(res=>{
+    getGameApi(1,-1).then(res=>{
         const data = res.data;
         if(data.code==200){
            gameInfo.value = data.data.records;
@@ -225,10 +228,10 @@ const getGameInfo =() =>{
 getGameInfo();
 
 const getArticleTypeInfo =() =>{
-    getArticleTypeApi().then(res=>{
+    getArticleTypeApi(1,-1).then(res=>{
         const data = res.data;
         if(data.code==200){
-          articleTypeInfo.value = data.data;
+          articleTypeInfo.value = data.data.records;
         }
         else{
           articleTypeInfo.value={}

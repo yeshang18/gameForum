@@ -36,4 +36,4 @@ app.component("CoverUpload",CoverUpload);
 app.config.globalProperties.Verify=Verify;
 app.config.globalProperties.Message =Message;
 app.config.globalProperties.Util =Util;
-app.config.globalProperties.$ImgUrl = "http://localhost:8080//images/";
+app.config.globalProperties.$ImgUrl = "http://118.89.199.233:8080/images/";

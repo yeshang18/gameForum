@@ -27,7 +27,8 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("/images/**").addResourceLocations("file:D://gameforumImg/");
+//        registry.addResourceHandler("/images/**").addResourceLocations("file:D://gameforumImg/");
+        registry.addResourceHandler("images/**").addResourceLocations("file:/www/wwwroot/default/GameServer/BBSImg/");
     }
 
     /**

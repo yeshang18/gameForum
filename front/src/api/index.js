@@ -46,9 +46,10 @@ export const reduceintegralApi = (num) =>{
     })
 }
 // 增加经验
-export const addLevelApi = (num,dayExp) =>{
-    return request.put('/user/level',{params:{num,dayExp}
-    })
+export const addLevelApi = (data) =>{
+    return request.put('/user/level',data,{headers:{
+        'Content-Type':'multipart/form-data'
+    }})
 }
 // 注销账户
 export const deleteUserApi = (data) =>{

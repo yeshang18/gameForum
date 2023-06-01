@@ -28,7 +28,7 @@
 <script setup>
 import { ref,  getCurrentInstance, nextTick, } from "vue"
 import { useStore } from "vuex";
-import { saveCommentApi } from "@/api";
+import { saveCommentApi,getforumSettingApi,addLevelApi} from "@/api";
 import { async } from "@kangc/v-md-editor";
 
 const { proxy } = getCurrentInstance();
@@ -138,7 +138,10 @@ const sendCommentHandle=async()=>{
 }
 const addLevelHandle = async()=>{
     await getForumSetting();
-    addLevelApi(forumSettingInfo.value.commentExp,forumSettingInfo.value.dayExp).then(res=>{
+    const dataF =new FormData();
+    dataF.append("num",forumSettingInfo.value.commentExp);
+    dataF.append("dayExp",forumSettingInfo.value.dayExp);
+    addLevelApi(dataF).then(res=>{
     if(res.data.code==200){
       return
     }
@@ -155,11 +158,11 @@ const forumSettingInfo = ref({
       dayExp:66
 });
 const getForumSetting = async()=>{
-  await getForumSetting().then(res=>{
+  await getforumSettingApi().then(res=>{
     const data = res.data;
     if(data.code==200){
       if(data.data.length!=0){
-        forumSettingInfo.value=data.data[0];
+        forumSettingInfo.value=data.data.records[0];
       }
       else{
         forumSettingInfo.value={
