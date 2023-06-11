@@ -13,6 +13,7 @@
    <div class="comment-form-panel">
         <PostComment :avatar-width="50" 
         :user-id="currentUserInfo.id" 
+        :user-img="currentUserInfo.img"
         :article-id="articleId" 
         :placeholder-info="'快发送一条友善的评论吧~'"
         :comment-type="1"
@@ -24,6 +25,7 @@
         <template #default="{data}" @loadData="nextPage">
             <CommentListItem :commentData="data" 
             :articleUserId="articleUserId"
+            :current-user-img="currentUserInfo.img"
             :current-user-id="currentUserInfo.id"
             @hiddenAllReply="hiddenAllReplyHandle"
             @deleteLoadHandle="deleteLoadHandle"></CommentListItem>

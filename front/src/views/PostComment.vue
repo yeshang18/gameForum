@@ -1,6 +1,6 @@
 <template>
   <div class="post-form-panel">
-        <Avatar :width="avatarWidth" :userId="userId"></Avatar>
+        <Avatar :width="avatarWidth" :userId="userId" :url="userImg"></Avatar>
         <div class="comment-form">
             <el-form
               :model="formData"
@@ -40,6 +40,9 @@ const props =defineProps({
     },
     userId:{
         type:Number
+    },
+    userImg:{
+        type:String
     },
     articleId:{
         type:Number

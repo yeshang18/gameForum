@@ -6,11 +6,17 @@
     <div class="ucenter-panel" >
         <div class="user-side">
             <div class="avatar-panel">
-                <div class="edit-btn" v-if="userId == currentUserInfo.id" @click="setShowType(0)">
+                <div class="edit-info">
+                    <div class="edit-btn" v-if="userId == currentUserInfo.id" @click="setShowType(0)">
                     修改资料
                 </div>
+                <div class="edit-btn" v-if="userId == currentUserInfo.id" @click="setShowType(2)">
+                    修改密码
+                </div>
+            </div>
+                
                 <div class="avatar-inner">
-                    <Avatar :width="120" :userId="userId"></Avatar>
+                    <Avatar :width="120" :userId="userId" :url="userInfo.img"></Avatar>
                 </div>
                 <div class="user-name">
                     <span>{{ userInfo.name }}</span>
@@ -46,7 +52,15 @@
             <!-- <el-icon><ArrowLeft /></el-icon> -->
             <div class="return" @click="setShowType(1)">&lt返回</div>
             <div class="form-info">
-                <UserForm :formData = "userInfo"></UserForm>
+                <UserForm :formData = "userInfo" :form-type="0"></UserForm>
+            </div>
+            
+        </div>
+        <div class="update-form" v-if="showType==2">
+            <!-- <el-icon><ArrowLeft /></el-icon> -->
+            <div class="return" @click="setShowType(1)">&lt返回</div>
+            <div class="form-info">
+                <UserForm :formData = "userInfo" :form-type="2"></UserForm>
             </div>
             
         </div>
@@ -77,7 +91,8 @@ const setShowType = (type)=>{
 }
 
 
-const userId = ref()
+const userId = ref(
+)
 const userInfo=ref({});
 const loadUserInfo = async ()=>{
    await getUserByIdApi(userId.value).then(res=>{
@@ -111,6 +126,7 @@ const getArticleByUser = () =>{
         }
     })
 }
+//翻页
 const loadArticle = (pageNo,pageSize)=>{
     getArticleByUserApi(userId.value,pageNo,pageSize).then(res=>{
         const data = res.data;
@@ -122,11 +138,19 @@ const loadArticle = (pageNo,pageSize)=>{
 
 
 onMounted(()=>{
-    userId.value = route.params.userId;
+    userId.value =Number(route.params.userId);
     loadUserInfo();
     getArticleByUser();
 })
 
+watch(() =>route.params.userId,
+(newVal, oldVal) => {
+    if(newVal){
+    userId.value =Number(route.params.userId);
+    loadUserInfo();
+    getArticleByUser();
+    }
+}, { immediate: true, deep: true });
 
 </script>
 
@@ -145,13 +169,19 @@ onMounted(()=>{
             margin-right: 10px;
             .avatar-panel{
                 border-radius: 10px;
-                .edit-btn{
+                .edit-info{
+                    display: flex;
+                    justify-content: space-between;
+                    .edit-btn{
                     cursor: pointer;
+                    padding-left: 5px;
                     padding-right: 5px;
                     text-align:right;
                     font-size: 14px;
                     color: #2366ff;
                 }
+                }
+                
                 background: #ddd;
                 text-align: center;
                 padding: 10px 0px;
@@ -227,6 +257,10 @@ onMounted(()=>{
             background: #fff; 
             padding-top: 20px;
             border-radius: 5px;
+            .form-info{
+                display: flex;
+                justify-content: center;
+            }
         }
     }
 }

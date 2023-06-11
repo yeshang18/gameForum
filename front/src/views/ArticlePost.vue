@@ -130,7 +130,8 @@ const postHandler= async()=>{
     if(!valid){
       return;
     }
-    saveArticleApi(formData.value).then(res=>{
+    else{
+      saveArticleApi(formData.value).then(res=>{
       const data = res.data;
       if(data.code = 200)
       {
@@ -141,6 +142,8 @@ const postHandler= async()=>{
         proxy.Message.error(data.msg);
       }
     })
+    }
+    
   })
 }
 

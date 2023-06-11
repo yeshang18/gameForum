@@ -5,22 +5,22 @@
     </resultMap>
 
     <select id="selectArticleByTitle" resultType="com.gameForum.entity.ArticleDto" resultMap="baseMap">
-        SELECT article.*,a.name as game_name,user.user_name,c.type_name,d.comments,
+        SELECT article.*,a.name as game_name,user.user_name,user.user_img,c.type_name,d.comments,
                 if(isnull(b.id),false,true) as flag
             FROM article
             LEFT JOIN (SELECT id,name FROM game where deleted = 0) a ON article.game_id=a.id
-            LEFT JOIN (SELECT id,name as user_name FROM user where deleted = 0) user on article.user_id = user.id
+            LEFT JOIN (SELECT id,name as user_name,img as user_img FROM user where deleted = 0) user on article.user_id = user.id
             LEFT JOIN (SELECT id,type_name FROM article_type where deleted = 0) c ON article.article_type_id = c.id
             LEFT JOIN (SELECT article_id,count(*) as comments FROM comment where deleted = 0 GROUP BY article_id) d ON article.id=d.article_id
             left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id
             WHERE article.title like #{title} and deleted=0 order by article.is_top Desc,article.update_time Desc limit #{pageNo},#{pageSize};
     </select>
     <select id="selectArticleByGame" resultType="com.gameForum.entity.ArticleDto" resultMap="baseMap">
-        SELECT article.*,a.name as game_name,user.user_name,c.type_name,d.comments,
+        SELECT article.*,a.name as game_name,user.user_name,user.user_img,c.type_name,d.comments,
             if(isnull(b.id),false,true) as flag
             FROM article
             LEFT JOIN (SELECT id,name FROM game where deleted = 0) a ON article.game_id=a.id
-            LEFT JOIN (SELECT id,name as user_name FROM user where deleted = 0) user on article.user_id = user.id
+            LEFT JOIN (SELECT id,name as user_name,img as user_img FROM user where deleted = 0) user on article.user_id = user.id
             LEFT JOIN (SELECT id,type_name FROM article_type where deleted = 0) c ON article.article_type_id = c.id
             LEFT JOIN (SELECT article_id,count(*) as comments FROM comment where deleted = 0 GROUP BY article_id) d ON article.id=d.article_id
             left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id
@@ -31,22 +31,22 @@
               and deleted=0 order by article.is_top Desc,article.update_time Desc limit #{pageNo},#{pageSize};
     </select>
     <select id="selectArticleById" resultType="com.gameForum.entity.ArticleDto" resultMap="baseMap">
-        SELECT article.*,a.name as game_name,user.user_name,c.type_name,d.comments,
+        SELECT article.*,a.name as game_name,user.user_name,user.user_img,c.type_name,d.comments,
             if(isnull(b.id),false,true) as flag
             FROM article
             LEFT JOIN (SELECT id,name FROM game where deleted = 0) a ON article.game_id=a.id
-            LEFT JOIN (SELECT id,name as user_name FROM user where deleted = 0) user on article.user_id = user.id
+            LEFT JOIN (SELECT id,name as user_name,img as user_img FROM user where deleted = 0) user on article.user_id = user.id
             LEFT JOIN (SELECT id,type_name FROM article_type where deleted = 0) c ON article.article_type_id = c.id
             LEFT JOIN (SELECT article_id,count(*) as comments FROM comment where deleted = 0 GROUP BY article_id) d ON article.id=d.article_id
             left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id
             WHERE article.id= #{id} and deleted=0;
     </select>
     <select id="selectArticleByUser" resultType="com.gameForum.entity.UserDto" resultMap="baseMap">
-        SELECT article.*,a.name as game_name,user.user_name,c.type_name,d.comments,
+        SELECT article.*,a.name as game_name,user.user_name,user.user_img,c.type_name,d.comments,
         if(isnull(b.id),false,true) as flag
         FROM article
         LEFT JOIN (SELECT id,name FROM game where deleted = 0) a ON article.game_id=a.id
-        LEFT JOIN (SELECT id,name as user_name FROM user where deleted = 0) user on article.user_id = user.id
+        LEFT JOIN (SELECT id,name as user_name,img as user_img FROM user where deleted = 0) user on article.user_id = user.id
         LEFT JOIN (SELECT id,type_name FROM article_type where deleted = 0) c ON article.article_type_id = c.id
         LEFT JOIN (SELECT article_id,count(*) as comments FROM comment where deleted = 0 GROUP BY article_id) d ON article.id=d.article_id
         left JOIN (SELECT article_id,id FROM like_record WHERE user_id = #{userId} AND deleted = 0) b on b.article_id = article.id

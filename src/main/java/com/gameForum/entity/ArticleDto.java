@@ -14,5 +14,7 @@ public class ArticleDto extends Article{
 
     private String typeName;
 
+    private String userImg;
+
     private Integer comments;
 }

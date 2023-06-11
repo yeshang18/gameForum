@@ -1,90 +1,3 @@
-<!-- <template>
-  <div class="cover-upload">
-    <el-upload
-        name="file"
-        class="avatar-uploader"
-        accept=".png,.PNG,.jpg,.JPG,.JPEG,.jpeg,.gif,.GIF,.bmp,.BMP"
-        :multiple="false"
-        :show-file-list="false"
-        :http-request="uploadImage()"
-    >
-        <div class="cover-upload-btn">
-            <template v-if="localFile">
-            <img :src="localFile" />
-            </template>
-            <template v-else>
-                <img :src="proxy.$ImgUrl+modelValue.imageUrl" 
-                v-if="modelValue && modelValue.imageUrl"/>
-                <span class="iconfont icon-add" v-else></span>
-            </template>
-        </div>
-    </el-upload>
-  </div>
-</template>
-
-<script setup>
-import { uploadFileApi } from "@/api";
-import { ref, reactive, getCurrentInstance, nextTick } from "vue"
-const { proxy } = getCurrentInstance();
-
-
-const props =defineProps({
-    modelValue:{
-        type:Object,
-        default:null,
-    },
-})
-
-const localFile =ref(null);
-
-const emit = defineEmits(["update:modelValue"])
-const uploadImage =async (file)=>{
-    // file = file.file;
-    // let img = new FileReader();
-    // img.readAsDataURL(file);
-    // img.onload = ({target})=>{
-    //     localFile.value = target.result;
-    // };
-    let url = "";
-    const formdata = new FormData();
-    formdata.append('file',file);
-    await uploadFileApi(formdata).then(res=>{
-    const data = res.data;
-    if(data.code==200){
-      url = data.data;
-    }
-  })
-  const imgUrl = proxy.$ImgUrl+url;
-   emit("update:modelValue",imgUrl)
-}
-
-</script>
-
-<style lang="scss" scoped>
-.cover-upload{
-    .cover-upload-btn{
-        background: #efeded;
-        width:150px;
-        height: 150px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .iconfont{
-            font-size:50px;
-            color:#ddd;
-        }
-        img{
-            width: 100%;
-        }
-    }
-
-}
-
-</style>
- -->
-
-
-
 <template>
     <div>
     <el-upload
@@ -93,6 +6,7 @@ const uploadImage =async (file)=>{
         :show-file-list="false"
         :multiple="false"
         :http-request="uploadImage"
+        :before-upload="beforeAvatarUpload"
     >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
@@ -106,7 +20,28 @@ import { uploadFileApi } from "@/api";
 import { ref, reactive, getCurrentInstance, nextTick } from "vue"
 const { proxy } = getCurrentInstance();
 
-const imageUrl = ref('')
+
+
+const props = defineProps({
+    getImageUrl:{
+        type:String,
+        default:''
+    }
+})
+const imageUrl = ref(props.getImageUrl)
+
+
+const beforeAvatarUpload = (rawFile) => {
+  if (rawFile.type !== 'image/jpeg') {
+    ElMessage.error('图片格式错误!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('图片大小不能超过2MB!')
+    return false
+  }
+  return true
+}
+
 
 const emit = defineEmits(["update:modelValue"])
 const uploadImage =async (file)=>{

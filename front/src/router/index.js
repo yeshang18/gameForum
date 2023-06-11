@@ -32,7 +32,11 @@ const routes = [
       {
         path:"/index",
         component:()=>import('../views/Index.vue')
-      }
+      },
+      {
+        path:"/searchArticle/:title",
+        component:()=>import('../views/ArticleSearch.vue')
+      },
     ]
   },
 

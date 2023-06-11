@@ -2,15 +2,37 @@ server:
   port: 8080
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://118.89.199.233:3306/gameforum?characterEncoding=utf-8
-    username: gameforum
-    password: root@forum
-#    url: jdbc:mysql://localhost:3306/gameforum?characterEncoding=utf-8
-#    username: root
-#    password: root
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://118.89.199.233:3306/gameforum?characterEncoding=utf-8
+#    username: gameforum
+#    password: root@forum
+    url: jdbc:mysql://localhost:3306/gameforum?characterEncoding=utf-8
+    username: root
+    password: root
   application:
     name: gameforum
+  mail:
+    #配置smtp服务主机地址
+    host: smtp.qq.com
+    #发送者邮箱
+    username: 2500595148@qq.com
+    #配置密码,注意不是真正的密码，而是刚刚申请到的授权码
+    password: wmnptmkzjwgbecfb
+    #端口号465或587
+    port: 587
+    #默认的邮件编码为UTF-8
+    default-encoding: UTF-8
+    #其他参数
+    properties:
+      mail:
+        #配置SSL 加密工厂
+        smtp:
+          ssl:
+            #本地测试，先放开ssl
+            enable: false
+            required: false
+          #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: false
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -18,7 +40,7 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
-#img:
-#  path: D:\gameforumImg\
 img:
-  path: /www/wwwroot/default/GameServer/BBSImg/
+  path: D:\gameforumImg\
+#img:
+#  path: /www/wwwroot/default/GameServer/BBSImg/

@@ -22,6 +22,9 @@
                     <a class="menu" href="#" v-if="userInfo.power == 1"><RouterLink to="/end">管理</RouterLink></a>
                 </div>
             </div>
+            <div class="search-info">
+                <Search></Search>
+            </div>
             <div class="option">
                 <el-button type="primary" @click="newPost()">发帖</el-button>
             </div>
@@ -47,7 +50,7 @@
             </div> -->
             <div class="user-info" v-if="userInfo.id">
                 <el-dropdown>
-                    <avatar :userId="userInfo.id" style="{outline: none;}"></avatar>
+                    <avatar :userId="userInfo.id" :url="userInfo.img" style="{outline: none;}"></avatar>
                     <template #dropdown>
                         <div class="user-details" :style="{textAlign:'center'}">
                             <div class="user-name" :style="{'font-size':'14px','font-weight':'bold'}">{{userInfo.name}}</div>
@@ -85,6 +88,7 @@ import { ref,onMounted,watch,getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import { getUserByIdApi,getGameByTypeApi,getGameApi,getPlatformApi,getGameTypeApi } from "@/api";
 import router from '@/router';
+import Search from '@/components/Search.vue';
 
 const {proxy} = getCurrentInstance();
 const store =useStore();
@@ -180,7 +184,7 @@ const newPost = ()=>{
     align-items: center;
     box-shadow: 0 2px 6px 0 #ddd;
     .top-text{
-        width: 70%;
+        width: 30%;
         display: flex;
         align-items: center;
         .menu{
@@ -188,6 +192,9 @@ const newPost = ()=>{
             margin: 10px;
         }
 
+    }
+    .search-info{
+        width: 40%;
     }
     .option{
         padding-right: 10px;

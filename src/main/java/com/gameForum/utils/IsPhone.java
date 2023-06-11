@@ -15,6 +15,5 @@ public class IsPhone {
         Matcher matcher = pattern.matcher(phone);
 
         return matcher.matches();
-
     }
 }

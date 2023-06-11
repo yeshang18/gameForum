@@ -45,6 +45,7 @@ const props = defineProps({
     .dialog-body{
         min-height: 100px;
         max-height: calc(100vh - 180px);
+        overflow: auto;
     }
 
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="comment-item">
-    <Avatar :width="50" :userId="commentData.userId"></Avatar>
+    <Avatar :width="50" :userId="commentData.userId" :url="commentData.img"></Avatar>
     <div class="comment-info">
         <div class="user-name">
             <span class="name"><RouterLink :to="'/user/'+commentData.userId">{{ commentData.userName }}</RouterLink> </span>
@@ -36,7 +36,7 @@
         <!-- 二级评论 -->
         <div class="comment-sub-list" v-if = "commentData.children">
             <div class="comment-sub-item" v-for="childrenData in commentData.children">
-                <Avatar :width="30" :userId="childrenData.userId"></Avatar>
+                <Avatar :width="30" :userId="childrenData.userId" :url="childrenData.img"></Avatar>
                 <div class="comment-info">
                     <div class="user-name">
                         <span class="name"><RouterLink :to="'/user/'+childrenData.userId">{{ childrenData.userName }}</RouterLink></span>
@@ -71,6 +71,7 @@
             <PostComment 
             :avatarWidth="30" 
             :userId="currentUserId" 
+            :user-img="currentUserImg"
             :commentId="commentData.id"
             :placeholderInfo="'回复 @'+commentData.userName"
             :commentType="2"
@@ -101,6 +102,9 @@ const props = defineProps({
     },
     currentUserId:{
         type:Number
+    },
+    currentUserImg:{
+        type:String
     }
 })
 

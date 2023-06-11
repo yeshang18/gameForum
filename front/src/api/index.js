@@ -1,5 +1,3 @@
-import { id } from "@kangc/v-md-editor";
-import axios from "../http/request";
 import request from "../http/request";
 
 /*---------------用户相关------------*/
@@ -22,6 +20,10 @@ export const getUserByIdApi = (id) =>{
 // 修改信息
 export const updateUserApi = (data) =>{
     return request.put('/user/update',data,{
+    })
+}
+export const resetPasswordApi = (data) =>{
+    return request.put('/user/resetPwd',data,{
     })
 }
 // 批量获取用户
@@ -56,7 +58,11 @@ export const deleteUserApi = (data) =>{
     return request.delete('/user/level',data,{
     })
 }
-
+//字段是否重复
+export const repeatCheckApi = (type,str) =>{
+    return request.get('/user/repeat',{params:{type,str}},{
+    })
+}
 /*---------------平台相关------------*/
 //获取平台
 export const getPlatformApi = (pageNo,pageSize,status) =>{
@@ -156,7 +162,7 @@ export const getArticleByUserApi = (byUserId,pageNo,pageSize)=>{
 // 根据标题获取帖子
 export const getArticleByTitleApi = (title,pageNo,pageSize) =>{
 
-    return request.get('/article/title',{params:{title,pageNo,pageSize}})
+    return request.get('/article/byTitle',{params:{title,pageNo,pageSize}})
 }
 // 根据游戏获取帖子
 export const getArticleByGameApi = (gameId,pageNo,pageSize,articleTypeId) =>{
@@ -286,5 +292,13 @@ export const updateForumSettingApi = (data) =>{
     })
 }
 
+/*---------------文件相关------------*/
+//发送html邮件
+export const sendHtmlMailApi=(data)=>{
+    return request.post('/sendMail/sendHtml',data,{})
+}
 
-
+/*---------------验证码相关------------*/
+export const getVerifyCodeApi=()=>{
+    return request.get('/verify/get',{responseType:'blob'})
+}

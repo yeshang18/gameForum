@@ -1,18 +1,21 @@
 package com.gameForum.controller;
 
 
+import cn.hutool.crypto.digest.MD5;
 import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gameForum.common.R;
 import com.gameForum.entity.User;
 import com.gameForum.entity.UserDto;
 import com.gameForum.service.UserService;
+import com.gameForum.utils.CheckUtil;
 import com.gameForum.utils.IsPhone;
 import com.gameForum.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,22 +75,26 @@ public class UserController {
      */
     @GetMapping("/repeat")
     @ApiOperation("检测用户名是否重复")
-    public R<String> isRepeat(String username,String phone){
+    public R<String> isRepeat(Integer type,String str){
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(User::getUsername,username);
-        LambdaQueryWrapper<User> lambdaQueryWrapper1 = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper1.eq(User::getPhone,phone);
+        if(type==1){
+
+            lambdaQueryWrapper.eq(User::getUsername,str);
+        } else if (type==2) {
+            lambdaQueryWrapper.eq(User::getEmail,str);
+        }
         User user = userService.getOne(lambdaQueryWrapper);
-        User user1 = userService.getOne(lambdaQueryWrapper1);
         if(user!=null)
         {
-            return R.error("用户名重复");
+            if(type==1) {
+                return R.error("用户名已存在");
+            }
+            else if(type==2){
+                return R.error("该邮箱已被注册");
+            }
         }
-        if(user1!=null)
-        {
-            return R.error("当前手机号已注册");
-        }
-        return R.success("用户名可用");
+
+        return R.success("无重复");
     }
 
 
@@ -96,28 +103,63 @@ public class UserController {
      */
     @PostMapping("/register")
     @ApiOperation("用户注册")
-    public R<String> register(@RequestBody User user){
+    public R<String> register(@RequestBody UserDto user,HttpSession session){
         //校验手机号格式
-        if(!IsPhone.checkNum(user.getPhone()))
+        if(!CheckUtil.phoneCheck(user.getPhone()))
         {
             return R.error("请输入正确的手机号码");
+        }
+        if(!CheckUtil.mailCheck(user.getEmail())){
+            return R.error("邮箱格式错误");
+        }
+        if(!CheckUtil.usernameCheck(user.getUsername())){
+            return R.error("用户名不合法");
+        }
+        if(!CheckUtil.passwordCheck(user.getPassword())){
+            return R.error("密码格式错误");
+        }
+
+        if(session.getAttribute("code")==null) {
+            return R.error("验证码超时，请重新发送邮箱验证码");
+        }
+        String getCode =  session.getAttribute("code").toString();
+        if(user.getCode()==null){
+            return R.error("请输入邮箱验证码");
+        }
+        if(!user.getCode().equals(getCode)){
+            return R.error("邮箱验证码错误");
+        }
+        if(session.getAttribute("verifyCode")==null){
+            return R.error("验证码超时，请刷新验证码");
+        }
+        String getVerityCode = session.getAttribute("verifyCode").toString();
+        if(user.getVerifyCode()==null){
+            return R.error("请输入验证码");
+        }
+        if(!user.getVerifyCode().equals(getVerityCode)){
+            return R.error("验证码错误");
         }
         //检测是否被注册
         LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(User::getUsername, user.getUsername());
         LambdaQueryWrapper<User> lambdaQueryWrapper1 =new LambdaQueryWrapper<>();
-        lambdaQueryWrapper1.eq(User::getPhone, user.getPhone());
+        lambdaQueryWrapper1.eq(User::getEmail, user.getEmail());
         int count = Math.toIntExact(userService.count(lambdaQueryWrapper));
         if(count>0)
             return R.error("该用户名已被注册");
         int count1 = Math.toIntExact(userService.count(lambdaQueryWrapper1));
         if(count1>0)
-            return R.error("该手机号已被注册");
+            return R.error("该邮箱已被注册");
         String password = user.getPassword()+user.getUsername();
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         user.setPassword(password);
-        userService.save(user);
-        return R.success("添加成功!");
+
+        User userAdd = new User();
+        BeanUtils.copyProperties(user,userAdd);
+        System.out.println(userAdd);
+        return R.success("成功");
+        //userService.save(userAdd);
+        //return R.success("添加成功!");
     }
 
     /**
@@ -125,10 +167,20 @@ public class UserController {
      */
     @PostMapping("/login")
     @ApiOperation("用户登陆")
-    public R<User> login(@RequestBody User user, HttpServletResponse response){
+    public R<User> login(@RequestBody UserDto user, HttpServletResponse response,HttpSession session){
         //验证是否用户名以及手机号都为空
-        if(user.getUsername()==null&&user.getPhone()==null)
-            return R.error("请输入用户名或手机号码！");
+        if(user.getUsername()==null)
+            return R.error("请输入用户名");
+        if(session.getAttribute("verifyCode")==null){
+            return R.error("验证码超时，请刷新验证码");
+        }
+        String getVerityCode = session.getAttribute("verifyCode").toString();
+        if(user.getVerifyCode()==null){
+            return R.error("请输入验证码");
+        }
+        if(!user.getVerifyCode().equals(getVerityCode)){
+            return R.error("验证码错误");
+        }
         //添加条件
         LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(user.getUsername()!=null,User::getUsername,user.getUsername());
@@ -158,7 +210,71 @@ public class UserController {
      */
     @PutMapping("/update")
     @ApiOperation("修改信息")
-    public R<String> update(@RequestBody User user){
+    public R<String> update(@RequestBody User user,HttpServletRequest request){
+        String token =request.getHeader("Authorization").split(" ")[1];
+        Integer userId = null;
+        if(!token.equals("null")){
+            if(TokenUtil.checkSign(token)) {
+                userId = TokenUtil.getUserId(token);
+            }
+            else{
+                return R.loginError("请登录!");
+            }
+        }
+        else{
+            return R.loginError("请登录!");
+        }
+        if(!Objects.equals(userId, user.getId())){
+            return R.error("异常操作，请重试！");
+        }
+        if(user.getPassword()!=null){
+            if(!CheckUtil.passwordCheck(user.getPassword())){
+                return R.error("密码格式错误");
+            }
+            User user1 = userService.getById(user.getId());
+            String password = user.getPassword()+user.getUsername();
+            password = DigestUtils.md5DigestAsHex(password.getBytes());
+            if(Objects.equals(user1.getPassword(), password)){
+                return R.error("新密码与旧密码不可相同");
+            }
+            user.setPassword(password);
+        }
+        userService.updateById(user);
+        return R.success("修改成功!");
+    }
+
+    @PutMapping("/resetPwd")
+    @ApiOperation("重置密码")
+    public R<String> update(@RequestBody UserDto userDto,HttpSession session){
+        if(!CheckUtil.mailCheck(userDto.getEmail())){
+            return R.error("邮箱格式错误");
+        }
+        LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(User::getEmail, userDto.getEmail());
+        User user = userService.getOne(lambdaQueryWrapper);
+        if(user==null){
+            return R.nferror("该邮箱账号不存在！");
+        }
+
+        if(session.getAttribute("code")==null) {
+            return R.error("验证码超时，请重新发送邮箱验证码");
+        }
+        String getCode =  session.getAttribute("code").toString();
+        if(userDto.getCode()==null){
+            return R.error("请输入邮箱验证码");
+        }
+        if(!userDto.getCode().equals(getCode)){
+            return R.error("邮箱验证码错误");
+        }
+        if(!CheckUtil.passwordCheck(userDto.getPassword())){
+            return R.error("密码格式错误");
+        }
+        String password = userDto.getPassword()+user.getUsername();
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
+        if(Objects.equals(user.getPassword(), password)){
+            return R.error("新密码与旧密码不可相同");
+        }
+        user.setPassword(password);
         userService.updateById(user);
         return R.success("修改成功!");
     }

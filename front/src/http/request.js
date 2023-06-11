@@ -9,10 +9,10 @@ import { Promise } from "core-js";
 
 // const contentTypeForm = "application/x-www-form-urlencoded;charset=UTF-8";
 // const contentTypeJson = "application/json"
-
+axios.defaults.withCredentials=true;
 const request = axios.create({
     baseURL:window.env.BaseURL,
-    timeout:10*1000
+    timeout:30*1000
 })
 
 //简单版

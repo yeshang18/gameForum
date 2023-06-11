@@ -3,7 +3,7 @@
     <div class="article-item-inner">
         <div class="article-body">
             <div class="user-info">
-                <Avatar :width="30" :userId="data.userId"></Avatar>
+                <Avatar :width="30" :userId="data.userId" :url="data.userImg"></Avatar>
                 <RouterLink :to="'/user/'+data.userId" class="a-link">{{ data.userName }}</RouterLink>
                 <el-divider direction="vertical"></el-divider>
                 <div class="post-time">{{ data.createTime }}</div>

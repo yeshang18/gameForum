@@ -21,7 +21,7 @@ import CoverUpload from './components/CoverUpload.vue'
 
 
 const app = createApp(App)
-
+// axios.defaults.withCredentials=true;
 app.use(store).use(router).mount('#app')
 
 app.config.globalProperties.VueCookies = VueCookies;
@@ -36,4 +36,4 @@ app.component("CoverUpload",CoverUpload);
 app.config.globalProperties.Verify=Verify;
 app.config.globalProperties.Message =Message;
 app.config.globalProperties.Util =Util;
-app.config.globalProperties.$ImgUrl = "http://118.89.199.233:8080/images/";
+app.config.globalProperties.$ImgUrl = window.env.ImageURL;

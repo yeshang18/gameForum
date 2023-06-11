@@ -1,6 +1,6 @@
 <template>
   <div class="index-info">
-    <div class="index-font">欢迎来到GameBBS</div>
+    <!-- <div class="index-font">欢迎来到GameBBS</div> -->
   </div>
 </template>
 

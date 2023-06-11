@@ -5,7 +5,7 @@
             <div class="title"><h1>{{ articleInfo.title }}</h1></div>
             <div class="main-info">
                 <div class="user-info">
-                    <Avatar :width="40" :userId="articleInfo.userId"></Avatar>
+                    <Avatar :width="40" :userId="articleInfo.userId" :url="articleInfo.userImg"></Avatar>
                 <div class="user-name"><RouterLink :to="'/user/'+articleInfo.userId">{{ articleInfo.userName }}</RouterLink> </div>
                 <div class="post-time">{{ articleInfo.createTime }}</div>
                 <div class="iconfont icon-eye-solid">{{ articleInfo.view == 0?"浏览":articleInfo.view }}</div>
@@ -67,8 +67,14 @@ const getArticleById = (articleId)=>{
 
 onMounted(()=>{
     getArticleById(route.params.articleId)
+    let getId = route.params.articleId;
     setTimeout(() => {
-        postViewHandle(route.params.articleId)
+        if(route.params.articleId===getId){
+            postViewHandle(route.params.articleId)
+        }
+        else{
+
+        }
     }, 10*1000);
 })
 

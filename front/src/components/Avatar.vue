@@ -12,7 +12,7 @@
         height:width+'px',
         'border-radius':width/2+'px',
     }"
-    :src='url'
+    :src="url==null?proxy.$ImgUrl+'moren.jpeg':url"
     fit="fill"
     loading="lazy"
     v-if="userId!=null"
@@ -34,7 +34,7 @@
     const props =defineProps({
         url:{
             type:String,
-            default:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+            default:null
         },
         userId:{
             type:Number
